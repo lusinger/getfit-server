@@ -8,7 +8,7 @@ const getPrivateKey = async() => {
   return key;
 };
 
-const getExpTime = (): number => {
+export const getExpTime = (): number => {
   return process.env.JWT_EXP ? parseInt(process.env.JWT_EXP) : 120
 };
 
@@ -23,11 +23,3 @@ const validateSessionToken = async(token: string) => {
   const response = jwt.verify(token, key);
   console.log(response);
 };
-
-/* const test = async() => {
-  const token = await signSessionKey({mail: 'lukas.singer@outlook.com'});
-  console.log(token);
-  validateSessionToken(token);
-}
-
-test(); */
