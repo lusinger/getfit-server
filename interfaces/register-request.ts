@@ -9,4 +9,5 @@ export interface RegisterRequest{
   targetWeight: number;
   changePerWeek: number;
   gender: 'male' | 'female';
+  activityRate: 1.2 | 1.375 | 1.55 | 1.725 | 1.9;
 }
