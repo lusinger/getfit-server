@@ -13,16 +13,15 @@ export const register = async(server: Express, url: string): Promise<Express> =>
     const hashedPw = await encryptPw(request.password);
     const dbResponse = await registerUser(request, hashedPw);
 
-    if(true){
-      const response: AuthResponse = {statusCode: 201, message: 'USER_CREATED'};
-      res.send(
-        response,
-      );
-    }else{
-      const response: AuthResponse = {statusCode: 409, message: 'USER_ALREADY_EXISTS'};
-      res.send(
-        response,
-      );
-    }
+    switch(dbResponse){
+      case 0: 
+        const successResponse: AuthResponse = {statusCode: 201, message: 'USER_CREATED'};
+        res.send(successResponse);
+        break;
+      case 23505: 
+        const errorResponse: AuthResponse = {statusCode: 409, message: 'USER_ALREADY_EXISTS'}; 
+        res.send(errorResponse);
+        break;
+    };
   });
 }
