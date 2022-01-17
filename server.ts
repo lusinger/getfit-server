@@ -16,7 +16,10 @@ const server = express();
 server.use(express());
 server.use(express.json());
 server.use(cookieParser());
-server.use(cors());
+server.use(cors({
+  credentials: true,
+  origin: 'http://localhost:4200',
+}));
 
 const port = getPort();
 

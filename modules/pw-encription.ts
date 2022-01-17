@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import dotenv, { parse } from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const getSaltRounds = (): number => {
