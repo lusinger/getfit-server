@@ -12,7 +12,7 @@ export const getExpTime = (): number => {
   return process.env.JWT_EXP ? parseInt(process.env.JWT_EXP) : 120
 };
 
-const signSessionKey = async(payload: object): Promise<string> => {
+export const signSessionKey = async(payload: object): Promise<string> => {
   const key = await getPrivateKey();
   const token = jwt.sign(payload, key, {algorithm: 'RS256', expiresIn: getExpTime()});
   return token;
