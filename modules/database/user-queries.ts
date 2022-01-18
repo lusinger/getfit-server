@@ -33,6 +33,15 @@ export const existsUser = async(req: LoginRequest): Promise<any[] | null> => {
   }
 };
 
+export const existsMail = async(mail: string): Promise<boolean> => {
+  try {
+    const dbResponse = await query('SELECT mail FROM users WHERE mail = $1', [mail]);
+    return dbResponse.rowCount > 0 ? true : false;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const registerUser = async(req: RegisterRequest, hashedPw: string): Promise<number> => {
   try {
     const {userName, mail, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender} = req;
