@@ -18,8 +18,9 @@ export const signSessionKey = async(payload: object): Promise<string> => {
   return token;
 };
 
-const validateSessionToken = async(token: string) => {
+export const validateSessionToken = async(token: string): Promise<jwt.JwtPayload> => {
   const key = await getPrivateKey();
   const response = jwt.verify(token, key);
   console.log(response);
+  return response;
 };

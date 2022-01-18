@@ -7,7 +7,8 @@ dotenv.config();
 import {login} from './routes/login-route';
 import { register } from './routes/register-route';
 import { loadUser } from './routes/load-user-route';
-import { resetPassword } from './routes/reset-password';
+import { resetPwRequest } from './routes/reset-password-request';
+import {resetPw} from './routes/reset-password';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;
@@ -28,7 +29,8 @@ const port = getPort();
 register(server, '/api/register');
 login(server, '/api/login');
 loadUser(server, '/api/loaduser');
-resetPassword(server, '/api/resetpassword');
+resetPwRequest(server, '/api/requestpwreset');
+resetPw(server, '/api/resetpassword');
 
 server.listen(port, () => {
   console.log(`[SERVER] is listening on port: ${port}`);

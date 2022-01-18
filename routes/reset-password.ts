@@ -1,37 +1,46 @@
-import { Express } from "express";
-import { AuthResponse } from "../interfaces/auth-response";
-import { existsMail } from "../modules/database/user-queries";
-import { signSessionKey } from "../modules/jwt";
+import {Express} from 'express';
+import {query} from '../modules/database/database-module'
+import bcrypt from 'bcrypt';
+import { validateSessionToken } from '../modules/jwt';
+import { comparePw } from '../modules/pw-encription';
+import { encryptPw } from '../modules/pw-encription';
 
-export const resetPassword = (server: Express, url: string): Express => {
-  return server.get(url, async(req, res) => {
+export const resetPw = (server: Express, url: string): Express => {
+  return server.put(url, async(req, res) => {
     try {
-      const {mail} = req.query; 
-      let exists: boolean = false;
-      let token: string = '';
-      const response: AuthResponse = {statusCode: 200, message: 'IF_USER_WITH_MAIL_EXISTS_YOU_RECIEVED_MAIL'};
-      if(typeof mail === 'string'){
-        exists = await existsMail(mail);
-        token = await signSessionKey({mail: mail});
-      }else{
-      }
-
-      if(exists){
-        res.cookie('RESET_MAIL', token, {
-          httpOnly: true,
-          maxAge: 10,
-          secure: true,
-        });
-        res.send(
-          response,
-        )
-      }else{
-        res.send(
-          response,
-        )
+      const {newPassword} = req.body;
+      const token = req.cookies.RESET_MAIL_TOKEN;
+      const validation = await validateSessionToken(token);
+      console.log(validation.mail);
+      const dbResponse = await query('SELECT password FROM users WHERE mail = $1', [validation.mail]);
+      const object = dbResponse.rows[0] as any;
+      if('password' in object){
+        console.log(validation.mail);
+        console.log(object.password);
+        console.log(newPassword);
+        const areEqual = await comparePw(newPassword, object.password);
+        if(areEqual){
+          console.log('new cant be old');
+          res.send({
+            statusCode: 409,
+            message: 'NEW PASSWORD CANT BE OLD PASSWORD',
+          });
+        }else if(!areEqual){
+          console.log('reset');
+          const hashedPw = await encryptPw(object.password);
+          console.log(hashedPw);
+          const dbRepsonse = await query('UPDATE users SET password = $1 WHERE mail = $2', [hashedPw, validation.mail]);
+          res.clearCookie('RESET_MAIL_TOKEN');
+          res.send({
+            statusCode: 200,
+            message: 'PASSWORD RESET',
+          });
+        }else{
+          console.log('error');
+        }
       }
     } catch (err) {
-      throw err;
+      
     }
   });
-}
+}  
