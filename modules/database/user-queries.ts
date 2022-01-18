@@ -2,7 +2,7 @@ import {query} from './database-module';
 import { User } from '../../interfaces/user';
 import { LoginRequest } from '../../interfaces/login-request';
 import { RegisterRequest } from '../../interfaces/register-request';
-import { DatabaseError, QueryArrayResult } from 'pg';
+import { DatabaseError, Query, QueryArrayResult } from 'pg';
 
 const calculateTDEE = (user: RegisterRequest): number => {
   const {age, height, currentWeight, targetWeight, changePerWeek, gender, activityRate} = user;
@@ -23,11 +23,11 @@ const calculateTDEE = (user: RegisterRequest): number => {
   return Math.floor(tdee);
 }
 
-export const existsUser = async(req: LoginRequest): Promise<any[] | null> => {
+export const userExists = async(req: LoginRequest): Promise<QueryArrayResult | null> => {
   try {
-    const dbResponse = await query('SELECT username, mail, password FROM users WHERE username = $1 OR mail = $1', 
+    const dbResponse = await query('SELECT * FROM users WHERE username = $1 OR mail = $1', 
       [req.user]);
-    return dbResponse.rowCount > 0 ? dbResponse.rows[0] : null;
+    return dbResponse.rowCount === 0 ? null : dbResponse;
   } catch (err) {
     throw err;
   }
