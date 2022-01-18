@@ -59,5 +59,3 @@ export const registerUser = async(req: RegisterRequest, hashedPw: string): Promi
     }
   }
 };
-
-existsUser({user: 'lukas.singer', password: 'admin'});
