@@ -44,12 +44,12 @@ export const existsMail = async(mail: string): Promise<boolean> => {
 
 export const registerUser = async(req: RegisterRequest, hashedPw: string): Promise<number> => {
   try {
-    const {userName, mail, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender} = req;
+    const {userName, mail, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, activityRate} = req;
     const tdee = calculateTDEE(req);
 
-    const dbResponse = await query(`INSERT INTO users(username, mail, password, fullname, age, height, currentweight, targetweight, changeperweek, gender, caloriegoal) 
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-      [userName, mail, hashedPw, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, tdee]);
+    const dbResponse = await query(`INSERT INTO users(username, mail, password, fullname, age, height, currentweight, targetweight, changeperweek, gender, caloriegoal, activity) 
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+      [userName, mail, hashedPw, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, tdee, activityRate]);
     return 0;
   } catch (err) {
     if(err instanceof DatabaseError && err.code){
