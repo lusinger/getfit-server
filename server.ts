@@ -6,6 +6,7 @@ dotenv.config();
 
 import {login} from './routes/login-route';
 import { register } from './routes/register-route';
+import { loadUser } from './routes/load-user-route';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;
@@ -25,6 +26,7 @@ const port = getPort();
 
 register(server, '/api/register');
 login(server, '/api/login');
+loadUser(server, '/api/loaduser');
 
 server.listen(port, () => {
   console.log(`[SERVER] is listening on port: ${port}`);
