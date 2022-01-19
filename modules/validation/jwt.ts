@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -18,9 +18,17 @@ export const signSessionKey = async(payload: object): Promise<string> => {
   return token;
 };
 
-export const validateSessionToken = async(token: string): Promise<jwt.JwtPayload> => {
-  const key = await getPrivateKey();
-  const response = jwt.verify(token, key);
-  console.log(response);
-  return response;
+export const validateSessionToken = async(token: string): Promise<jwt.JwtPayload | null> => {
+  try {
+    const key = await getPrivateKey();
+    const response = jwt.verify(token, key);
+    console.log(response);
+    return response;
+  } catch (err) {
+    if(err instanceof TokenExpiredError){
+      return null
+    }else{
+      throw err;
+    }
+  }
 };

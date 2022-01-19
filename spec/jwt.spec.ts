@@ -1,4 +1,4 @@
-import {getExpTime} from '../modules/jwt';
+import {getExpTime} from '../modules/validation/jwt';
 import dotenv from 'dotenv';
 dotenv.config();
 

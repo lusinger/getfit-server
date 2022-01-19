@@ -1,5 +1,5 @@
 import {Express} from 'express';
-import { validateSessionToken } from '../modules/jwt';
+import { validateSessionToken } from '../modules/validation/jwt';
 
 export const getItems = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
@@ -10,7 +10,6 @@ export const getItems = (server: Express, url: string): Express => {
 
     }else{
       res.send({
-        
       })
     }
     res.send({
