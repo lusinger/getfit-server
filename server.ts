@@ -9,6 +9,7 @@ import { register } from './routes/register-route';
 import { loadUser } from './routes/load-user-route';
 import { resetPwRequest } from './routes/reset-password-request';
 import {resetPw} from './routes/reset-password';
+import { getItems } from './routes/get-items-route';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;
@@ -31,6 +32,8 @@ login(server, '/api/login');
 loadUser(server, '/api/loaduser');
 resetPwRequest(server, '/api/requestpwreset');
 resetPw(server, '/api/resetpassword');
+
+getItems(server, '/api/items');
 
 server.listen(port, () => {
   console.log(`[SERVER] is listening on port: ${port}`);
