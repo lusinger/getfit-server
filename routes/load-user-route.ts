@@ -7,7 +7,7 @@ import {query} from '../modules/database/database-module';
 export const loadUser = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
     try {
-      const token = req.cookies.SESSION_TOKEN;
+      const token = req.cookies.LOGIN_TOKEN;
       const decoded = await jwt.decode(token) as any;
 
       const dbResponse = await query('SELECT username, mail, fullname, age, height, currentweight, targetweight, changeperweek, caloriegoal FROM users WHERE mail = $1', [decoded.mail]);
