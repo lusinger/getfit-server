@@ -7,16 +7,17 @@ export const getItem = async(id: number): Promise<Item | null> => {
 };
 
 export const getItems = async(search?: string, start?: number, end?: number): Promise<Item[] | null> => {
+  console.log(search, start, end);
   if(search === undefined){
     const queryResult = await query('SELECT * FROM items');
     return queryResult.rowCount !== 0 ? queryResult.rows as unknown as Item[] : null;
   }else{
-    if(typeof start !== 'undefined'){
-      if(typeof end !== 'undefined'){
+    if(start !== undefined){
+      if(end !== undefined){
         const queryResult = await query('SELECT * FROM items WHERE itemname ~ $1', [search]);
         if(queryResult.rowCount !== 0){
           const data = queryResult.rows.slice(start, end);
-          return data === [] ? data as unknown as Item[] : null;
+          return data.length >= 0 ? data as unknown as Item[] : null;
         }else{
           return null
         }
@@ -24,7 +25,7 @@ export const getItems = async(search?: string, start?: number, end?: number): Pr
         const queryResult = await query('SELECT * FROM items WHERE itemname ~ $1', [search]);
         if(queryResult.rowCount !== 0){
           const data = queryResult.rows.slice(start);
-          return data === [] ? data as unknown as Item[] : null;
+          return data.length >= 0 ? data as unknown as Item[] : null;
         }else{
           return null
         }
