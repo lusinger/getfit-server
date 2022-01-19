@@ -1,6 +1,6 @@
 import { Express } from "express";
 import { existsMail } from "../modules/database/user-queries";
-import { signSessionKey } from "../modules/jwt";
+import { signSessionKey } from "../modules/validation/jwt";
 import { sendResetMail } from "../modules/mail-service/mail-service";
 
 export const resetPwRequest = (server: Express, url: string): Express => {

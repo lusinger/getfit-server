@@ -1,7 +1,7 @@
 import {Express} from 'express';
 import {query} from '../modules/database/database-module'
 import bcrypt from 'bcrypt';
-import { validateSessionToken } from '../modules/jwt';
+import { validateSessionToken } from '../modules/validation/jwt';
 import { comparePw } from '../modules/pw-encription';
 import { encryptPw } from '../modules/pw-encription';
 

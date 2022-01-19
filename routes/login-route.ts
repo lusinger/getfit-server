@@ -5,7 +5,7 @@ import {LoginRequest} from '../interfaces/login-request';
 
 import { existsUser } from '../modules/database/user-queries';
 import { comparePw } from '../modules/pw-encription';
-import { signSessionKey } from '../modules/jwt';
+import { signSessionKey } from '../modules/validation/jwt';
 
 export const login = (server: Express, url: string) => {
   return server.get(url, async(req, res) => {
