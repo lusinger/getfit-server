@@ -10,6 +10,7 @@ import { loadUser } from './routes/load-user-route';
 import { resetPwRequest } from './routes/reset-password-request';
 import {resetPw} from './routes/reset-password';
 import { getItems } from './routes/get-items-route';
+import { logout } from './routes/logout-route';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;
@@ -29,6 +30,7 @@ const port = getPort();
 
 register(server, '/api/register');
 login(server, '/api/login');
+logout(server, '/api/logout');
 loadUser(server, '/api/loaduser');
 resetPwRequest(server, '/api/requestpwreset');
 resetPw(server, '/api/resetpassword');

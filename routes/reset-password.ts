@@ -11,7 +11,6 @@ export const resetPw = (server: Express, url: string): Express => {
       const {newPassword} = req.body;
       const token = req.cookies.RESET_MAIL_TOKEN;
       const validation = await validateSessionToken(token);
-      console.log(validation.mail);
       const dbResponse = await query('SELECT password FROM users WHERE mail = $1', [validation.mail]);
       const object = dbResponse.rows[0] as any;
       if('password' in object){
