@@ -2,7 +2,7 @@ import {query} from './database-module';
 import { User } from '../../interfaces/user';
 import { LoginRequest } from '../../interfaces/login-request';
 import { RegisterRequest } from '../../interfaces/register-request';
-import { DatabaseError, Query, QueryArrayResult } from 'pg';
+import { DatabaseError, QueryArrayResult } from 'pg';
 
 const calculateTDEE = (user: RegisterRequest): number => {
   const {age, height, currentWeight, targetWeight, changePerWeek, gender, activityRate} = user;
@@ -47,9 +47,11 @@ export const registerUser = async(req: RegisterRequest, hashedPw: string): Promi
     const {userName, mail, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, activityRate} = req;
     const tdee = calculateTDEE(req);
 
-    const dbResponse = await query(`INSERT INTO users(username, mail, password, fullname, age, height, currentweight, targetweight, changeperweek, gender, caloriegoal, activity) 
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
-      [userName, mail, hashedPw, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, tdee, activityRate]);
+    const date = new Date();
+    
+    const dbResponse = await query(`INSERT INTO users(username, mail, password, fullname, age, height, currentweight, targetweight, changeperweek, gender, activityrating, caloriegoal, createdon) 
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+    [userName, mail, hashedPw, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, activityRate, tdee, date.toISOString()]);
     return 0;
   } catch (err) {
     if(err instanceof DatabaseError && err.code){
