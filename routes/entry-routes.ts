@@ -44,19 +44,11 @@ export const getEntriesRoute = (server: Express, url: string): Express => {
           const snack = entries.filter(entry => {return entry.section === 'snack' ? true : false});
 
           res.send({
-            statusCode: 200,
-            message: 'RETURNED_FOUND_ENTRIES',
-            payload: {
-              breakfast: breakfast,
-              lunch: lunch,
-              dinner: dinner,
-              snack: snack,
-            },
+            data: data,
           });
         }else{
           res.send({
-            statusCode: 404,
-            message: 'NO_ENTRIES_FOUND',
+            data: [],
           });
         }
       }
