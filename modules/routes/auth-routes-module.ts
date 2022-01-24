@@ -6,7 +6,7 @@ import {AuthResponse} from '../../interfaces/auth-response';
 import {LoginRequest} from '../../interfaces/login-request';
 
 import { userExists } from '../database/user-queries';
-import { validatePassword } from '../validation/validation-module';
+import { getSessionToken, validatePassword } from '../validation/validation-module';
 import { createSessionToken } from '../validation/validation-module';
 
 const login = (server: Express, url: string) => {
@@ -19,7 +19,7 @@ const login = (server: Express, url: string) => {
       switch(validPassword){
         case true:
           const loginToken = await createSessionToken({mail: mail});
-          res.cookie(process.env.JWT_SESSION_TOKEN as string, loginToken, {
+          res.cookie(getSessionToken(), loginToken, {
             httpOnly: true,
             secure: true,
           });
@@ -44,4 +44,16 @@ const login = (server: Express, url: string) => {
   });
 }
 
-export { login };
+const logout = (server: Express, url: string): Express => {
+  return server.get(url, async(req, res) => {
+    res.clearCookie(getSessionToken());
+    res.send({
+      statusCode: 200,
+      message: 'session token cleared',
+      payload: {logout: true},
+    } as AuthResponse);
+  });
+}
+
+export { login, logout };
+

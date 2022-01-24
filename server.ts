@@ -4,13 +4,12 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { login } from './modules/routes/auth-routes-module';
+import { login, logout } from './modules/routes/auth-routes-module';
 import { register } from './modules/routes/register-route';
 import { loadUser } from './modules/routes/load-user-route';
 import { resetPwRequest } from './modules/routes/reset-password-request';
 import {resetPw} from './modules/routes/reset-password';
 import { getItems } from './modules/routes/get-items-route';
-import { logout } from './modules/routes/logout-route';
 import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './modules/routes/entry-routes';
 
 const getPort = (): number => {
@@ -32,14 +31,14 @@ const port = getPort();
 register(server, '/api/register');
 login(server, '/api/login');
 logout(server, '/api/logout');
-loadUser(server, '/api/loaduser');
+//loadUser(server, '/api/loaduser');
 resetPwRequest(server, '/api/requestpwreset');
 resetPw(server, '/api/resetpassword');
 
 getItems(server, '/api/items');
 
-getEntryRoute(server, '/api/entry');
-getEntriesRoute(server, '/api/entries');
+//getEntryRoute(server, '/api/entry');
+//getEntriesRoute(server, '/api/entries');
 deleteEntryRoute(server, '/api/delete/entry');
 addEntriesRoute(server, '/api/create/entries');
 
