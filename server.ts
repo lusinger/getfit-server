@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
+import dotenv, { load } from 'dotenv';
 dotenv.config();
 
 import { login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
-import { loadUser } from './modules/routes/user-routes-module';
+import { loadUserData, updateUserData } from './modules/routes/user-routes-module';
 import { getItems } from './modules/routes/get-items-route';
 import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './modules/routes/entry-routes';
 
@@ -29,7 +29,7 @@ register(server, '/api/register');
 login(server, '/api/login');
 logout(server, '/api/logout');
 resetPassword(server, '/api/reset');
-loadUser(server, '/api/loaduser');
+loadUserData(server, '/api/user');
 
 getItems(server, '/api/items');
 

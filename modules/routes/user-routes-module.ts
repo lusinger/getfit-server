@@ -4,7 +4,7 @@ import { AuthResponse } from '../../interfaces/auth-response';
 
 import {query} from '../database/database-module';
 
-const loadUser = (server: Express, url: string): Express => {
+const loadUserData = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
     try {
       const token = req.cookies.LOGIN_TOKEN;
@@ -29,4 +29,14 @@ const loadUser = (server: Express, url: string): Express => {
   });
 }
 
-export  { loadUser }
+const updateUserData = (server: Express, url: string): Express => {
+  return server.put(url, async(req, res) => {
+    try {
+      
+    } catch (err) {
+      throw err;
+    }
+  });
+}
+
+export  { loadUserData, updateUserData }
