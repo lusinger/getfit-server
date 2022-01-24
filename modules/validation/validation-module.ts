@@ -1,5 +1,5 @@
 import { Express, NextFunction, RequestHandler } from 'express';
-import jwt, { TokenExpiredError } from 'jsonwebtoken';
+import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
@@ -17,6 +17,10 @@ const getExpTime = (): number => {
 
 const getSessionToken = (): string => {
   return process.env.JWT_SESSION_TOKEN ? process.env.JWT_SESSION_TOKEN : 'SESSIONTOKEN';
+};
+
+const getResetToken = (): string => {
+  return process.env.JWT_RESET_TOKEN ? process.env.JWT_RESET_TOKEN : 'RESETTOKEN'; 
 }
 
 const createSessionToken = async(payload: any): Promise<string> => {
@@ -28,10 +32,13 @@ const validateSessionToken = async(token: string): Promise<jwt.JwtPayload | null
     const response = jwt.verify(token, await getPrivateKey());
     return response;
   } catch (err) {
-    if(err instanceof TokenExpiredError){
-      return null;
-    }else{
-      throw err;
+    switch(err){
+      case err instanceof TokenExpiredError:
+        return null;
+      case err instanceof JsonWebTokenError:
+        return null;
+      default:
+        return null;
     }
   }
 };
@@ -57,4 +64,4 @@ const validatePassword = async(rawPassword: string, encrypted: string): Promise<
   }
 };
 
-export {createSessionToken, validateSessionToken, encryptPassword, validatePassword, getSessionToken};
+export {createSessionToken, validateSessionToken, encryptPassword, validatePassword, getResetToken, getSessionToken};
