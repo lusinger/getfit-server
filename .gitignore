@@ -23,8 +23,11 @@ pids
 # Typescript output files
 build/
 
-# Ignore key and environment files
+# Ignore statements for files and folders regarding keys
 *.key
+keys/
+
+# Ignore key and environment files
 *.env
 *.sql
 
