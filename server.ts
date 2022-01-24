@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
-import { loadUser } from './modules/routes/load-user-route';
+import { loadUser } from './modules/routes/user-routes-module';
 import { getItems } from './modules/routes/get-items-route';
 import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './modules/routes/entry-routes';
 
@@ -20,7 +20,7 @@ server.use(express.json());
 server.use(cookieParser());
 server.use(cors({
   credentials: true,
-  /* origin: 'http://localhost:4200', */
+  origin: 'http://localhost:4200',
 }));
 
 const port = getPort();
@@ -29,12 +29,12 @@ register(server, '/api/register');
 login(server, '/api/login');
 logout(server, '/api/logout');
 resetPassword(server, '/api/reset');
-//loadUser(server, '/api/loaduser');
+loadUser(server, '/api/loaduser');
 
 getItems(server, '/api/items');
 
-//getEntryRoute(server, '/api/entry');
-//getEntriesRoute(server, '/api/entries');
+getEntryRoute(server, '/api/entry');
+getEntriesRoute(server, '/api/entries');
 deleteEntryRoute(server, '/api/delete/entry');
 addEntriesRoute(server, '/api/create/entries');
 
