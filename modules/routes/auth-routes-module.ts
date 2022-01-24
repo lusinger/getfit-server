@@ -25,21 +25,21 @@ const login = (server: Express, url: string) => {
           });
           res.send({
             statusCode: 200,
-            message: 'USER_VALID',
-          });
+            message: 'user is valid',
+          } as AuthResponse);
           break;
         case false:
           res.send({
             statusCode: 404,
-            message: 'USERNAME_OR_PASSWORD_INVALID',
-          });
+            message: 'username or password invalid',
+          } as AuthResponse);
           break;
       }
     }else{
       res.send({
         statusCode: 404,
-        message: 'USER_DOES_NOT_EXIST',
-      })
+        message: 'user not found',
+      } as AuthResponse)
     }
   });
 }
