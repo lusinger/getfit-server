@@ -2,12 +2,14 @@ import {Express} from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import {AuthResponse} from '../../interfaces/auth-response';
+import { AuthResponse } from '../../interfaces/auth-response';
 import {LoginRequest} from '../../interfaces/login-request';
 
 import { userExists } from '../database/user-queries';
-import { validatePassword } from '../validation/validation-module';
-import { createSessionToken } from '../validation/validation-module';
+import { createSessionToken, encryptPassword, validatePassword } from '../validation/validation-module';
+
+import { registerUser } from "../database/user-queries";
+import { RegisterRequest } from "../../interfaces/register-request";
 
 const login = (server: Express, url: string) => {
   return server.get(url, async(req, res) => {
@@ -44,4 +46,29 @@ const login = (server: Express, url: string) => {
   });
 }
 
-export { login };
+const register = async(server: Express, url: string): Promise<Express> => {
+  return server.post(url, async(req, res) => {
+    const request = req.body as RegisterRequest;
+
+    const hashedPw = await encryptPassword(request.password);
+    const dbResponse = await registerUser(request, hashedPw);
+
+    switch(dbResponse){
+      case 0: 
+        res.send({
+          statusCode: 201,
+          message: 'user created',
+        } as AuthResponse);
+        break;
+      case 23505: 
+        res.send({
+          statusCode: 409,
+          message: 'user already exists',
+        } as AuthResponse);
+        break;
+    };
+  });
+}
+
+export { login, register };
+

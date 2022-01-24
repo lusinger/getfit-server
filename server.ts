@@ -4,8 +4,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { login } from './modules/routes/auth-routes-module';
-import { register } from './modules/routes/register-route';
+import { login, register } from './modules/routes/auth-routes-module';
 import { loadUser } from './modules/routes/load-user-route';
 import { resetPwRequest } from './modules/routes/reset-password-request';
 import {resetPw} from './modules/routes/reset-password';
