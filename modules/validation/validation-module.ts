@@ -22,7 +22,6 @@ const createSessionToken = async(payload: any): Promise<string> => {
 const validateSessionToken = async(token: string): Promise<jwt.JwtPayload | null> => {
   try {
     const response = jwt.verify(token, await getPrivateKey());
-    console.log(response);
     return response;
   } catch (err) {
     if(err instanceof TokenExpiredError){
@@ -39,20 +38,20 @@ const getSaltRounds = (): number => {
   return process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10;
 };
 
-export const encryptPw = async(password: string): Promise<string> => {
+const encryptPassword = async(rawPassword: string): Promise<string> => {
   try {
-    return await bcrypt.hash(password, getSaltRounds());
+    return await bcrypt.hash(rawPassword, getSaltRounds());
   } catch (err) {
     throw err;
   }
 };
 
-export const comparePw = async(rawPassword: string, hashedPassword: string): Promise<boolean> => {
+const validatePassword = async(rawPassword: string, encrypted: string): Promise<boolean> => {
   try {
-    return await bcrypt.compare(rawPassword, hashedPassword);
+    return await bcrypt.compare(rawPassword, encrypted);
   } catch (err) {
     throw err;
   }
 };
 
-export {createSessionToken, validateSessionToken,};
+export {createSessionToken, validateSessionToken, encryptPassword, validatePassword};
