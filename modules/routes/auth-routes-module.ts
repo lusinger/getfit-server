@@ -6,8 +6,8 @@ import { AuthResponse } from '../../interfaces/auth-response';
 import {LoginRequest} from '../../interfaces/login-request';
 
 import { userExists } from '../database/user-queries';
+import { getSessionToken, validatePassword } from '../validation/validation-module';
 import { createSessionToken, encryptPassword, validatePassword } from '../validation/validation-module';
-
 import { registerUser } from "../database/user-queries";
 import { RegisterRequest } from "../../interfaces/register-request";
 
@@ -21,7 +21,7 @@ const login = (server: Express, url: string) => {
       switch(validPassword){
         case true:
           const loginToken = await createSessionToken({mail: mail});
-          res.cookie(process.env.JWT_SESSION_TOKEN as string, loginToken, {
+          res.cookie(getSessionToken(), loginToken, {
             httpOnly: true,
             secure: true,
           });
@@ -45,6 +45,17 @@ const login = (server: Express, url: string) => {
     }
   });
 }
+
+const logout = (server: Express, url: string): Express => {
+  return server.get(url, async(req, res) => {
+    res.clearCookie(getSessionToken());
+    res.send({
+      statusCode: 200,
+      message: 'session token cleared',
+      payload: {logout: true},
+    } as AuthResponse);
+  });
+} 
 
 const register = async(server: Express, url: string): Promise<Express> => {
   return server.post(url, async(req, res) => {
@@ -70,5 +81,5 @@ const register = async(server: Express, url: string): Promise<Express> => {
   });
 }
 
-export { login, register };
+export { login, logout, register };
 

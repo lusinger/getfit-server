@@ -15,6 +15,10 @@ const getExpTime = (): number => {
   return process.env.JWT_EXP ? parseInt(process.env.JWT_EXP) : 120;
 };
 
+const getSessionToken = (): string => {
+  return process.env.JWT_SESSION_TOKEN ? process.env.JWT_SESSION_TOKEN : 'SESSIONTOKEN';
+}
+
 const createSessionToken = async(payload: any): Promise<string> => {
   return jwt.sign(payload, await getPrivateKey(), {algorithm: 'RS256', expiresIn: getExpTime()});
 };
@@ -53,4 +57,4 @@ const validatePassword = async(rawPassword: string, encrypted: string): Promise<
   }
 };
 
-export {createSessionToken, validateSessionToken, encryptPassword, validatePassword};
+export {createSessionToken, validateSessionToken, encryptPassword, validatePassword, getSessionToken};
