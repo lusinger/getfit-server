@@ -1,3 +1,4 @@
+import { Express, NextFunction, RequestHandler } from 'express';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import fs from 'fs/promises';
@@ -5,7 +6,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 //--functions handling jsonwebtokens
-
 const getPrivateKey = async(): Promise<Buffer> => {
   const privateKey = await fs.readFile('./keys/private-key.key');
   return privateKey;
@@ -33,7 +33,6 @@ const validateSessionToken = async(token: string): Promise<jwt.JwtPayload | null
 };
 
 //--functions handling password creation and validation
-
 const getSaltRounds = (): number => {
   return process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10;
 };
@@ -54,4 +53,4 @@ const validatePassword = async(rawPassword: string, encrypted: string): Promise<
   }
 };
 
-export {createSessionToken, validateSessionToken, encryptPassword, validatePassword};
+export {createSessionToken, validateSessionToken, encryptPassword, validatePassword, validateUserRequest};
