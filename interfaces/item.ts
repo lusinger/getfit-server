@@ -1,5 +1,5 @@
 export interface Item {
-  id: number;
+  id?: number;
   itemname: string;
   protein: number;
   fat: number;
