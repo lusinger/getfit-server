@@ -1,7 +1,7 @@
 import {Express} from 'express';
 import {query} from '../modules/database/database-module'
 import bcrypt from 'bcrypt';
-import { validateSessionToken } from '../modules/jwt';
+import { validateSessionToken } from '../modules/validation/jwt';
 import { comparePw } from '../modules/pw-encription';
 import { encryptPw } from '../modules/pw-encription';
 
@@ -11,7 +11,6 @@ export const resetPw = (server: Express, url: string): Express => {
       const {newPassword} = req.body;
       const token = req.cookies.RESET_MAIL_TOKEN;
       const validation = await validateSessionToken(token);
-      console.log(validation.mail);
       const dbResponse = await query('SELECT password FROM users WHERE mail = $1', [validation.mail]);
       const object = dbResponse.rows[0] as any;
       if('password' in object){

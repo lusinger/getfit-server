@@ -23,11 +23,11 @@ const calculateTDEE = (user: RegisterRequest): number => {
   return Math.floor(tdee);
 }
 
-export const existsUser = async(req: LoginRequest): Promise<any[] | null> => {
+export const userExists = async(req: LoginRequest): Promise<QueryArrayResult | null> => {
   try {
-    const dbResponse = await query('SELECT username, mail, password FROM users WHERE username = $1 OR mail = $1', 
+    const dbResponse = await query('SELECT * FROM users WHERE username = $1 OR mail = $1', 
       [req.user]);
-    return dbResponse.rowCount > 0 ? dbResponse.rows[0] : null;
+    return dbResponse.rowCount === 0 ? null : dbResponse;
   } catch (err) {
     throw err;
   }
@@ -44,12 +44,14 @@ export const existsMail = async(mail: string): Promise<boolean> => {
 
 export const registerUser = async(req: RegisterRequest, hashedPw: string): Promise<number> => {
   try {
-    const {userName, mail, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender} = req;
+    const {userName, mail, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, activityRate} = req;
     const tdee = calculateTDEE(req);
 
-    const dbResponse = await query(`INSERT INTO users(username, mail, password, fullname, age, height, currentweight, targetweight, changeperweek, gender, caloriegoal) 
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-      [userName, mail, hashedPw, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, tdee]);
+    const date = new Date();
+    
+    const dbResponse = await query(`INSERT INTO users(username, mail, password, fullname, age, height, currentweight, targetweight, changeperweek, gender, activityrating, caloriegoal, createdon) 
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+    [userName, mail, hashedPw, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, activityRate, tdee, date.toISOString()]);
     return 0;
   } catch (err) {
     if(err instanceof DatabaseError && err.code){
@@ -59,5 +61,3 @@ export const registerUser = async(req: RegisterRequest, hashedPw: string): Promi
     }
   }
 };
-
-existsUser({user: 'lukas.singer', password: 'admin'});
