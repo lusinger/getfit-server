@@ -6,8 +6,7 @@ import { AuthResponse } from '../../interfaces/auth-response';
 import {LoginRequest} from '../../interfaces/login-request';
 
 import { userExists } from '../database/user-queries';
-import { getSessionToken, validatePassword } from '../validation/validation-module';
-import { createSessionToken, encryptPassword, validatePassword } from '../validation/validation-module';
+import { createSessionToken, encryptPassword, getSessionToken, validatePassword } from '../validation/validation-module';
 import { registerUser } from "../database/user-queries";
 import { RegisterRequest } from "../../interfaces/register-request";
 
