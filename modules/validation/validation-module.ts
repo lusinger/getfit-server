@@ -1,7 +1,10 @@
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
 dotenv.config();
+
+//--functions handling jsonwebtokens
 
 const getPrivateKey = async(): Promise<Buffer> => {
   const privateKey = await fs.readFile('./keys/private-key.key');
@@ -27,6 +30,28 @@ const validateSessionToken = async(token: string): Promise<jwt.JwtPayload | null
     }else{
       throw err;
     }
+  }
+};
+
+//--functions handling password creation and validation
+
+const getSaltRounds = (): number => {
+  return process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10;
+};
+
+export const encryptPw = async(password: string): Promise<string> => {
+  try {
+    return await bcrypt.hash(password, getSaltRounds());
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const comparePw = async(rawPassword: string, hashedPassword: string): Promise<boolean> => {
+  try {
+    return await bcrypt.compare(rawPassword, hashedPassword);
+  } catch (err) {
+    throw err;
   }
 };
 
