@@ -37,6 +37,16 @@ const updateUserData = (server: Express, url: string): Express => {
       throw err;
     }
   });
-}
+};
 
-export  { loadUserData, updateUserData }
+const deleteUser = (server: Express, url: string): Express => {
+  return server.delete(url, async(req, res) => {
+    try {
+      
+    } catch (err) {
+      throw err;
+    }
+  }); 
+};
+
+export  { loadUserData, updateUserData, deleteUser }
