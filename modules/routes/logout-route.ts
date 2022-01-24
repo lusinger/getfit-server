@@ -1,5 +1,5 @@
 import {Express} from 'express';
-import { AuthResponse } from '../interfaces/auth-response';
+import { AuthResponse } from '../../interfaces/auth-response';
 
 export const logout = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {

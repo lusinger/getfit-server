@@ -1,10 +1,10 @@
 import { Express } from "express";
 
-import { encryptPw } from "../modules/pw-encription";
-import { registerUser } from "../modules/database/user-queries";
+import { encryptPw } from "../pw-encription";
+import { registerUser } from "../database/user-queries";
 
-import { RegisterRequest } from "../interfaces/register-request";
-import { AuthResponse } from "../interfaces/auth-response";
+import { RegisterRequest } from "../../interfaces/register-request";
+import { AuthResponse } from "../../interfaces/auth-response";
 
 export const register = async(server: Express, url: string): Promise<Express> => {
   return server.post(url, async(req, res) => {

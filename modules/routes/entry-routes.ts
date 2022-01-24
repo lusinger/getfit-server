@@ -1,8 +1,8 @@
 import {Express} from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
-import { Entry } from '../interfaces/entry';
-import {getEntry, getEntries, deleteEntry, addEntries} from '../modules/database/data-queries';
-import { validateSessionToken } from '../modules/validation/jwt';
+import { Entry } from '../../interfaces/entry';
+import {getEntry, getEntries, deleteEntry, addEntries} from '../database/data-queries';
+import { validateSessionToken } from '../validation/jwt';
 
 export const getEntryRoute = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {

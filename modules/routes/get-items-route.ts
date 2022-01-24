@@ -1,7 +1,7 @@
 import {Express} from 'express';
-import { validateSessionToken } from '../modules/validation/jwt';
-import * as data from '../modules/database/data-queries';
-import { Item } from '../interfaces/item';
+import { validateSessionToken } from '../validation/jwt';
+import * as data from '../database/data-queries';
+import { Item } from '../../interfaces/item';
 
 export const getItems = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {

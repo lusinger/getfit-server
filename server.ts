@@ -4,14 +4,14 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import {login} from './routes/login-route';
-import { register } from './routes/register-route';
-import { loadUser } from './routes/load-user-route';
-import { resetPwRequest } from './routes/reset-password-request';
-import {resetPw} from './routes/reset-password';
-import { getItems } from './routes/get-items-route';
-import { logout } from './routes/logout-route';
-import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './routes/entry-routes';
+import {login} from './modules/routes/login-route';
+import { register } from './modules/routes/register-route';
+import { loadUser } from './modules/routes/load-user-route';
+import { resetPwRequest } from './modules/routes/reset-password-request';
+import {resetPw} from './modules/routes/reset-password';
+import { getItems } from './modules/routes/get-items-route';
+import { logout } from './modules/routes/logout-route';
+import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './modules/routes/entry-routes';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;

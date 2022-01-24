@@ -1,9 +1,9 @@
 import {Express} from 'express';
-import {query} from '../modules/database/database-module'
+import {query} from '../database/database-module'
 import bcrypt from 'bcrypt';
-import { validateSessionToken } from '../modules/validation/jwt';
-import { comparePw } from '../modules/pw-encription';
-import { encryptPw } from '../modules/pw-encription';
+import { validateSessionToken } from '../validation/jwt';
+import { comparePw } from '../pw-encription';
+import { encryptPw } from '../pw-encription';
 
 export const resetPw = (server: Express, url: string): Express => {
   return server.put(url, async(req, res) => {

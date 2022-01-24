@@ -1,11 +1,11 @@
 import {Express} from 'express';
 
-import {AuthResponse} from '../interfaces/auth-response';
-import {LoginRequest} from '../interfaces/login-request';
+import {AuthResponse} from '../../interfaces/auth-response';
+import {LoginRequest} from '../../interfaces/login-request';
 
-import { userExists } from '../modules/database/user-queries';
-import { comparePw } from '../modules/pw-encription';
-import { signSessionKey } from '../modules/validation/jwt';
+import { userExists } from '../database/user-queries';
+import { comparePw } from '../pw-encription';
+import { signSessionKey } from '../validation/jwt';
 
 export const login = (server: Express, url: string) => {
   return server.get(url, async(req, res) => {
