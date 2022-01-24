@@ -10,7 +10,6 @@ export const getItem = async(id: number): Promise<Item | null> => {
 };
 
 export const getItems = async(search?: string, start?: number, end?: number): Promise<Item[] | null> => {
-  console.log(search, start, end);
   if(search === undefined){
     const queryResult = await query('SELECT * FROM items');
     return queryResult.rowCount !== 0 ? queryResult.rows as unknown as Item[] : null;
@@ -66,24 +65,37 @@ export const getEntry = async(id: number): Promise<Entry | null> => {
 
 export const getEntries = async(date: Date, mail: string): Promise<Entry[] | null> => {
   try {
-    const entriesQuery = await query(`SELECT entries.* FROM entries INNER JOIN users ON entries.userid = users.id WHERE createon = $1 AND users.mail = $2`, [date, mail]);
+    const entriesQuery = await query(`SELECT entries.* FROM entries INNER JOIN users ON entries.userid = users.id WHERE entries.createdon = $1 AND users.mail = $2`, [date, mail]);
     if(entriesQuery.rowCount !== 0){
       const entries = entriesQuery.rows as unknown as Entry[];
-      entries.forEach(async(entry) => {
-        if(entry.isrecipe){
-          const content = await query(`SELECT * FROM items WHERE id = $1`, [entry.entryid]);
-          const item = content.rows[0] as unknown as Item;
-          entry.content = item;
-        }else{
+      for(const entry of entries){
+        if(entry.isrecipe === true){
           const content = await query(`SELECT * FROM recipes WHERE id = $1`, [entry.entryid]);
           const recipe = content.rows[0] as unknown as Recipe;
           entry.content = recipe;
+        }else{
+          const content = await query(`SELECT * FROM items WHERE id = $1`, [entry.entryid]);
+          const items = content.rows[0] as unknown as Item;
+          entry.content = items;
         }
-      });
+      }
       return entries;
     }else{
       return null;
     }
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const addEntries = async(entries: Entry[], mail: string): Promise<any> => {
+  try {
+    entries.forEach(async(entry) => {
+      const {createdon, userid, entryid, amount, unit, isrecipe, section} = entry;
+      const response = await query(`INSERT INTO entries(createdon, userid, entryid, amount, unit, isrecipe, section) 
+        VALUES($1, $2, $3, $4, $5, $6, $7)`, [createdon, userid, entryid, amount, unit, isrecipe, section]);
+      console.log(response);  
+    });
   } catch (err) {
     throw err;
   }

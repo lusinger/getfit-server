@@ -14,7 +14,6 @@ export const getItems = (server: Express, url: string): Express => {
 
     if(isValid !== null){
       const response = await data.getItems(search, start, end);
-      console.log(response);
       if(response !== null){
         res.send(
           response,

@@ -11,7 +11,7 @@ import { resetPwRequest } from './routes/reset-password-request';
 import {resetPw} from './routes/reset-password';
 import { getItems } from './routes/get-items-route';
 import { logout } from './routes/logout-route';
-import { deleteEntryRoute, getEntriesRoute, getEntryRoute } from './routes/entry-routes';
+import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './routes/entry-routes';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;
@@ -41,6 +41,7 @@ getItems(server, '/api/items');
 getEntryRoute(server, '/api/entry');
 getEntriesRoute(server, '/api/entries');
 deleteEntryRoute(server, '/api/delete/entry');
+addEntriesRoute(server, '/api/create/entries');
 
 server.listen(port, () => {
   console.log(`[SERVER] is listening on port: ${port}`);

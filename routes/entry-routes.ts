@@ -1,6 +1,7 @@
 import {Express} from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
-import {getEntry, getEntries, deleteEntry} from '../modules/database/data-queries';
+import { Entry } from '../interfaces/entry';
+import {getEntry, getEntries, deleteEntry, addEntries} from '../modules/database/data-queries';
 import { validateSessionToken } from '../modules/validation/jwt';
 
 export const getEntryRoute = (server: Express, url: string): Express => {
@@ -35,18 +36,11 @@ export const getEntriesRoute = (server: Express, url: string): Express => {
         const searchDate = new Date(year, month, date);
   
         const data = await getEntries(searchDate, valid.mail);
-
-        if(data && !data.length){
-          const entries = data;
-          const breakfast = entries.filter(entry => {return entry.section === 'breakfast' ? true : false});
-          const lunch = entries.filter(entry => {return entry.section === 'lunch' ? true : false});
-          const dinner = entries.filter(entry => {return entry.section === 'dinner' ? true : false});
-          const snack = entries.filter(entry => {return entry.section === 'snack' ? true : false});
-
-          res.send({
-            data: data,
-          });
+        if(data !== null){
+          console.log('hello');
+          res.send(data);
         }else{
+          console.log('not hello');
           res.send({
             data: [],
           });
@@ -61,6 +55,22 @@ export const getEntriesRoute = (server: Express, url: string): Express => {
       }else{
         throw err;
       }
+    }
+  });
+}
+
+export const addEntriesRoute = (server: Express, url: string): Express => {
+  return server.post(url, async(req, res) => {
+    const valid = await validateSessionToken(req.cookies.LOGIN_TOKEN);
+    if(valid !== null){
+      const entries = req.body as Entry[];
+      console.log(entries);
+      const response = await addEntries(entries, valid.mail);
+
+      res.send({
+        statusCode: 200,
+        message: 'ENTRIES_CREATED',
+      })
     }
   });
 }
