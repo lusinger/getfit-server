@@ -53,4 +53,4 @@ const validatePassword = async(rawPassword: string, encrypted: string): Promise<
   }
 };
 
-export {createSessionToken, validateSessionToken, encryptPassword, validatePassword, validateUserRequest};
+export {createSessionToken, validateSessionToken, encryptPassword, validatePassword};
