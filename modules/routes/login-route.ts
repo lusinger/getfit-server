@@ -5,7 +5,7 @@ import {LoginRequest} from '../../interfaces/login-request';
 
 import { userExists } from '../database/user-queries';
 import { comparePw } from '../pw-encription';
-import { signSessionKey } from '../validation/jwt';
+import { createSessionToken } from '../validation/validation-module';
 
 export const login = (server: Express, url: string) => {
   return server.get(url, async(req, res) => {
@@ -16,7 +16,7 @@ export const login = (server: Express, url: string) => {
       const validPassword = await comparePw(request.password, password);
       switch(validPassword){
         case true:
-          const loginToken = await signSessionKey({mail: mail});
+          const loginToken = await createSessionToken({mail: mail});
           res.cookie('LOGIN_TOKEN', loginToken, {
             httpOnly: true,
             secure: true,
