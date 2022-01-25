@@ -8,6 +8,7 @@ import { login, logout, register, resetPassword } from './modules/routes/auth-ro
 import { loadUserData, updateUserData, deleteUser } from './modules/routes/user-routes-module';
 import { getItems } from './modules/routes/get-items-route';
 import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './modules/routes/entry-routes';
+import { getItems, getEntry, getEntries, deleteEntry, addEntries } from './modules/routes/data-routes-module';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;
