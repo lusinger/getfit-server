@@ -30,6 +30,7 @@ login(server, '/api/login');
 logout(server, '/api/logout');
 resetPassword(server, '/api/reset');
 loadUserData(server, '/api/user');
+deleteUser(server, '/api/delete/user');
 
 getItems(server, '/api/items');
 
