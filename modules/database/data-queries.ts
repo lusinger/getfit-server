@@ -9,7 +9,7 @@ export const getItem = async(id: number): Promise<Item | null> => {
   return queryResult.rowCount !== 0 ? queryResult.rows[0] as unknown as Item : null;
 };
 
-export const getItems = async(search?: string, start?: number, end?: number): Promise<Item[] | null> => {
+export const getItemsData = async(search?: string, start?: number, end?: number): Promise<Item[] | null> => {
   if(search === undefined){
     const queryResult = await query('SELECT * FROM items');
     return queryResult.rowCount !== 0 ? queryResult.rows as unknown as Item[] : null;
@@ -39,7 +39,7 @@ export const getItems = async(search?: string, start?: number, end?: number): Pr
   }
 };
 
-export const getEntry = async(id: number): Promise<Entry | null> => {
+export const getEntryData = async(id: number): Promise<Entry | null> => {
   try {
     const entryQuery = await query(`SELECT * FROM entries WHERE id = $1`, [id]);
     if(entryQuery.rowCount !== 0){
@@ -63,7 +63,7 @@ export const getEntry = async(id: number): Promise<Entry | null> => {
   }
 }
 
-export const getEntries = async(date: Date, mail: string): Promise<Entry[] | null> => {
+export const getEntriesData = async(date: Date, mail: string): Promise<Entry[] | null> => {
   try {
     const entriesQuery = await query(`SELECT entries.* FROM entries INNER JOIN users ON entries.userid = users.id WHERE entries.createdon = $1 AND users.mail = $2`, [date, mail]);
     if(entriesQuery.rowCount !== 0){
@@ -88,7 +88,7 @@ export const getEntries = async(date: Date, mail: string): Promise<Entry[] | nul
   }
 }
 
-export const addEntries = async(entries: Entry[], mail: string): Promise<any> => {
+export const addEntriesData = async(entries: Entry[], mail: string): Promise<any> => {
   try {
     entries.forEach(async(entry) => {
       const {createdon, userid, entryid, amount, unit, isrecipe, section} = entry;
@@ -101,7 +101,7 @@ export const addEntries = async(entries: Entry[], mail: string): Promise<any> =>
   }
 }
 
-export const deleteEntry = async(id: number): Promise<QueryArrayResult> => {
+export const deleteEntryData = async(id: number): Promise<QueryArrayResult> => {
   try {
     const dbResponse = await query(`DELETE FROM entries WHERE id = $1`, [id]);
     return dbResponse;
