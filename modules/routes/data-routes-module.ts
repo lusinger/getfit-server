@@ -94,9 +94,7 @@ const getItems = (server: Express, url: string): Express => {
     const search = req.query?.search ? req.query.search as string : undefined;
     const start = req.query?.start ? parseInt(req.query.start as string) : undefined;
     const end = req.query?.end ? parseInt(req.query.end as string) : undefined;
-    const isValid = await validateSessionToken(req.cookies.LOGIN_TOKEN);
-
-    console.log(search, start, end);
+    const isValid = await validateSessionToken(req.cookies.SESSIONTOKEN);
 
     if(isValid !== null){
       const response = await getItemsData(search, start, end);
