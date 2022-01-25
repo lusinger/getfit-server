@@ -7,7 +7,7 @@ import { validateSessionToken } from '../validation/validation-module';
 const getEntry = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
     try {
-      if(await validateSessionToken(req.cookies.LOGIN_TOKEN)){
+      if(await validateSessionToken(req.cookies.SESSIONTOKEN)){
         const {id} = req.query;
         const data = await getEntryData(parseInt(id as string));
     
@@ -30,7 +30,7 @@ const getEntry = (server: Express, url: string): Express => {
 const getEntries = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
     try {
-      const valid = await validateSessionToken(req.cookies.LOGIN_TOKEN);
+      const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
       if(valid !== null){
         const {year, month, date}: {year: number, month: number, date: number} = req.query as any
         const searchDate = new Date(year, month, date);
@@ -61,7 +61,7 @@ const getEntries = (server: Express, url: string): Express => {
 
 const addEntries = (server: Express, url: string): Express => {
   return server.post(url, async(req, res) => {
-    const valid = await validateSessionToken(req.cookies.LOGIN_TOKEN);
+    const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
     if(valid !== null){
       const entries = req.body as Entry[];
       console.log(entries);
@@ -77,7 +77,7 @@ const addEntries = (server: Express, url: string): Express => {
 
 const deleteEntry = (server: Express, url: string): Express => {
   return server.delete(url, async(req, res) => {
-    const valid = await validateSessionToken(req.cookies.LOGIN_TOKEN);
+    const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
     if(valid !== null){
       console.log(req.query);
       const {id} = req.query;
