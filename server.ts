@@ -1,11 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
+import dotenv, { load } from 'dotenv';
 dotenv.config();
 
 import { login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
-import { loadUser } from './modules/routes/load-user-route';
+import { loadUserData, updateUserData, deleteUser } from './modules/routes/user-routes-module';
+import { getItems } from './modules/routes/get-items-route';
+import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './modules/routes/entry-routes';
 import { getItems, getEntry, getEntries, deleteEntry, addEntries } from './modules/routes/data-routes-module';
 
 const getPort = (): number => {
@@ -28,14 +30,15 @@ register(server, '/api/register');
 login(server, '/api/login');
 logout(server, '/api/logout');
 resetPassword(server, '/api/reset');
-loadUser(server, '/api/loaduser');
+loadUserData(server, '/api/user');
+deleteUser(server, '/api/delete/user');
 
 getItems(server, '/api/items');
 
-getEntry(server, '/api/entry');
-getEntries(server, '/api/entries');
-deleteEntry(server, '/api/delete/entry');
-addEntries(server, '/api/create/entries');
+getEntryRoute(server, '/api/entry');
+getEntriesRoute(server, '/api/entries');
+deleteEntryRoute(server, '/api/delete/entry');
+addEntriesRoute(server, '/api/create/entries');
 
 server.listen(port, () => {
   console.log(`[SERVER] is listening on port: ${port}`);
