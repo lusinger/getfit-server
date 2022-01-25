@@ -65,6 +65,7 @@ export const getEntryData = async(id: number): Promise<Entry | null> => {
 
 export const getEntriesData = async(date: Date, mail: string): Promise<Entry[] | null> => {
   try {
+    console.log('fetching');
     const entriesQuery = await query(`SELECT entries.* FROM entries INNER JOIN users ON entries.userid = users.id WHERE entries.createdon = $1 AND users.mail = $2`, [date, mail]);
     if(entriesQuery.rowCount !== 0){
       const entries = entriesQuery.rows as unknown as Entry[];
@@ -93,8 +94,7 @@ export const addEntriesData = async(entries: Entry[], mail: string): Promise<any
     entries.forEach(async(entry) => {
       const {createdon, userid, entryid, amount, unit, isrecipe, section} = entry;
       const response = await query(`INSERT INTO entries(createdon, userid, entryid, amount, unit, isrecipe, section) 
-        VALUES($1, $2, $3, $4, $5, $6, $7)`, [createdon, userid, entryid, amount, unit, isrecipe, section]);
-      console.log(response);  
+        VALUES($1, $2, $3, $4, $5, $6, $7)`, [createdon, userid, entryid, amount, unit, isrecipe, section]);  
     });
   } catch (err) {
     throw err;
