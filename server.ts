@@ -6,8 +6,6 @@ dotenv.config();
 
 import { login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
 import { loadUserData, updateUserData, deleteUser } from './modules/routes/user-routes-module';
-import { getItems } from './modules/routes/get-items-route';
-import { addEntriesRoute, deleteEntryRoute, getEntriesRoute, getEntryRoute } from './modules/routes/entry-routes';
 import { getItems, getEntry, getEntries, deleteEntry, addEntries } from './modules/routes/data-routes-module';
 
 const getPort = (): number => {
@@ -35,10 +33,10 @@ deleteUser(server, '/api/delete/user');
 
 getItems(server, '/api/items');
 
-getEntryRoute(server, '/api/entry');
-getEntriesRoute(server, '/api/entries');
-deleteEntryRoute(server, '/api/delete/entry');
-addEntriesRoute(server, '/api/create/entries');
+getEntry(server, '/api/entry');
+getEntries(server, '/api/entries');
+deleteEntry(server, '/api/delete/entry');
+addEntries(server, '/api/create/entries');
 
 server.listen(port, () => {
   console.log(`[SERVER] is listening on port: ${port}`);
