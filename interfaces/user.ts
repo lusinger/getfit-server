@@ -1,5 +1,3 @@
-import { Entry } from "./entry";
-
 export interface User{
   id?: number;
   userName?: string;
@@ -12,6 +10,7 @@ export interface User{
   targetWeight?: number;
   changePerWeek?: number;
   gender?: 'male' | 'female';
+  activityRating?: 1.2 | 1.375 | 1.55 | 1.725 | 1.9;
   calorieGoal?: number;
-  entries?: Entry[];
+  createdOn?: Date;
 }

@@ -65,7 +65,6 @@ export const getEntryData = async(id: number): Promise<Entry | null> => {
 
 export const getEntriesData = async(date: Date, mail: string): Promise<Entry[] | null> => {
   try {
-    console.log('fetching');
     const entriesQuery = await query(`SELECT entries.* FROM entries INNER JOIN users ON entries.userid = users.id WHERE entries.createdon = $1 AND users.mail = $2`, [date, mail]);
     if(entriesQuery.rowCount !== 0){
       const entries = entriesQuery.rows as unknown as Entry[];

@@ -94,7 +94,7 @@ const resetPassword = (server: Express, url: string): Express => {
         const doesMailExist = await existsMail(mail as string);
         if(doesMailExist){
           const resetToken = await createSessionToken({mail: mail});
-          sendResetMail('lukas.singer@outlook.com', resetToken.slice(0, 10));
+          sendResetMail(mail, resetToken.slice(0, 10));
           res.cookie(getResetToken(), resetToken, {
             httpOnly: true,
             secure: true,

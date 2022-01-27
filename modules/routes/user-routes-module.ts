@@ -4,6 +4,7 @@ import { AuthResponse } from '../../interfaces/auth-response';
 import { getSessionToken, validateSessionToken } from '../validation/validation-module';
 
 import {query} from '../database/database-module';
+import { User } from '../../interfaces/user';
 
 const loadUserData = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
@@ -15,10 +16,12 @@ const loadUserData = (server: Express, url: string): Express => {
         const {mail} = await jwt.decode(token) as any;
         const dbResponse = await query('SELECT id, username, mail, fullname, age, height, currentweight, targetweight, changeperweek, gender, activityrating, caloriegoal, createdon  FROM users WHERE mail = $1', [mail]);
         if(dbResponse.rowCount > 0){
+          const {id, username, mail, fullname, age, height, currentweight, targetweight, changeperweek, gender, activityrating, caloriegoal, createdon} = dbResponse.rows[0] as unknown as any;
+          const user: User = {id: id, userName: username, mail: mail, fullName: fullname, age: age, height: height, currentWeight: currentweight, targetWeight: targetweight, changePerWeek: changeperweek, gender: gender, activityRating: activityrating, calorieGoal: caloriegoal, createdOn: createdon}
           res.send({
             statusCode: 200,
             message: 'user loaded',
-            payload: dbResponse.rows[0],
+            payload: user,
           } as AuthResponse);
         }else{
           const errorResponse: AuthResponse = {statusCode: 404, message: 'FAILED_TO_LOAD_USER'};
@@ -55,6 +58,7 @@ const deleteUser = (server: Express, url: string): Express => {
       const isTokenValid = await validateSessionToken(req.cookies.SESSIONTOKEN as string);
       if(isTokenValid){
         const {id} = req.query;
+        const deleteEntries = await query('DELETE FROM entries WHERE userid = $1', [id]);
         const dbResponse = await query('DELETE FROM users WHERE id = $1', [id]);
         res.clearCookie(getSessionToken());
         res.send({

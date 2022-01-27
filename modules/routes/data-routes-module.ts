@@ -1,5 +1,6 @@
 import {Express} from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
+import { AuthResponse } from '../../interfaces/auth-response';
 import { Entry } from '../../interfaces/entry';
 import {getEntryData, getEntriesData, deleteEntryData, addEntriesData, getItemsData} from '../database/data-queries';
 import { validateSessionToken } from '../validation/validation-module';
@@ -22,7 +23,6 @@ const getEntry = (server: Express, url: string): Express => {
         }
       }
     } catch (err) {
-      console.log(err);
     }
   });
 }
@@ -37,10 +37,8 @@ const getEntries = (server: Express, url: string): Express => {
   
         const data = await getEntriesData(searchDate, valid.mail);
         if(data !== null){
-          console.log('hello');
           res.send(data);
         }else{
-          console.log('not hello');
           res.send({
             data: [],
           });
@@ -64,7 +62,6 @@ const addEntries = (server: Express, url: string): Express => {
     const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
     if(valid !== null){
       const entries = req.body as Entry[];
-      console.log(entries);
       const response = await addEntriesData(entries, valid.mail);
 
       res.send({
@@ -79,12 +76,14 @@ const deleteEntry = (server: Express, url: string): Express => {
   return server.delete(url, async(req, res) => {
     const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
     if(valid !== null){
-      console.log(req.query);
       const {id} = req.query;
 
       const response = await deleteEntryData(parseInt(id as string));
-      console.log(response);
-    
+      
+      res.send({
+        statusCode: 200,
+        message: 'entry deleted',
+      } as AuthResponse)
     }
   });
 }
@@ -115,4 +114,12 @@ const getItems = (server: Express, url: string): Express => {
   });
 }
 
-export {deleteEntry, addEntries, getEntry, getEntries, getItems};
+const addImage = (server: Express, url: string): Express => {
+  return server.post(url, async(req, res) => {
+    try {
+    } catch (err) {
+    }
+  });
+}
+
+export {deleteEntry, addEntries, getEntry, getEntries, getItems, addImage};
