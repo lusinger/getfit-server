@@ -1,9 +1,42 @@
-import { Express, NextFunction, RequestHandler } from 'express';
+import { Express, NextFunction, Request, Response } from 'express';
 import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
+import { AuthResponse } from '../../interfaces/auth-response';
 dotenv.config();
+
+//--Middleware function that handles token validation
+const authValidation = async (req: Request, res: Response, next: NextFunction) => {
+  if('RESETTOKEN' in req.cookies){
+    const isTokenValid = await validateSessionToken(req.cookies.RESETTOKEN);
+    if(isTokenValid !== null){
+      req.body.tokenValue = isTokenValid.mail;
+      next();
+    }else{
+      return res.send({
+        statusCode: 401,
+        message: 'not authorized',
+      } as AuthResponse);
+    }
+  }else if('SESSIONTOKEN' in req.cookies){
+    const isTokenValid = await validateSessionToken(req.cookies.SESSIONTOKEN);
+    if(isTokenValid !== null){
+      req.body.tokenValue = isTokenValid.mail;
+      next();
+    }else{
+      return res.send({
+        statusCode: 401,
+        message: 'not authorized',
+      } as AuthResponse);
+    }
+  }else{
+    return res.send({
+      statusCode: 401,
+      message: 'not authorized',
+    } as AuthResponse);
+  }
+}
 
 //--functions handling jsonwebtokens
 const getPrivateKey = async(): Promise<Buffer> => {
@@ -64,4 +97,4 @@ const validatePassword = async(rawPassword: string, encrypted: string): Promise<
   }
 };
 
-export {createSessionToken, validateSessionToken, encryptPassword, validatePassword, getResetToken, getSessionToken};
+export {authValidation, createSessionToken, validateSessionToken, encryptPassword, validatePassword, getResetToken, getSessionToken};
