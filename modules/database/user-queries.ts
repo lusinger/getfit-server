@@ -1,5 +1,4 @@
 import {query} from './database-module';
-import { User } from '../../interfaces/user';
 import { LoginRequest } from '../../interfaces/login-request';
 import { RegisterRequest } from '../../interfaces/register-request';
 import { DatabaseError, QueryArrayResult } from 'pg';
