@@ -14,7 +14,7 @@ const authValidation = async (req: Request, res: Response, next: NextFunction) =
       req.body.tokenValue = isTokenValid.mail;
       next();
     }else{
-      return res.send({
+      return res.status(401).json({
         statusCode: 401,
         message: 'not authorized',
       } as AuthResponse);
@@ -25,13 +25,13 @@ const authValidation = async (req: Request, res: Response, next: NextFunction) =
       req.body.tokenValue = isTokenValid.mail;
       next();
     }else{
-      return res.send({
+      return res.status(401).json({
         statusCode: 401,
         message: 'not authorized',
       } as AuthResponse);
     }
   }else{
-    return res.send({
+    return res.status(401).json({
       statusCode: 401,
       message: 'not authorized',
     } as AuthResponse);
