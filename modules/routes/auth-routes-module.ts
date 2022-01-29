@@ -8,12 +8,28 @@ import { AuthResponse } from '../../interfaces/auth-response';
 import {LoginRequest} from '../../interfaces/login-request';
 
 import { userExists } from '../database/user-queries';
-import { createSessionToken, encryptPassword, getResetToken, getSessionToken, validatePassword, validateSessionToken } from '../validation/validation-module';
+import { authValidation, createSessionToken, encryptPassword, getResetToken, getSessionToken, validatePassword, validateSessionToken } from '../validation/validation-module';
 import { registerUser } from "../database/user-queries";
 import { RegisterRequest } from "../../interfaces/register-request";
 
 import { existsMail } from '../database/user-queries';
 import { sendResetMail } from '../mail-service/mail-service';
+
+const refreshToken = (server: Express, url: string) => {
+  return server.get(url, authValidation, async(req, res) => {
+    console.log('refresh route');
+    res.clearCookie('SESSIONTOKEN');
+    const loginToken = await createSessionToken({mail: req.query.mail});
+    res.cookie(getSessionToken(), loginToken, {
+      httpOnly: true,
+      secure: true,
+    });
+    res.status(200).json({
+      statusCode: 200,
+      message: 'token refreshed',
+    } as AuthResponse);
+  });
+}
 
 const login = (server: Express, url: string) => {
   return server.get(url, async(req, res) => {
@@ -146,5 +162,5 @@ const resetPassword = (server: Express, url: string): Express => {
   });
 }
 
-export { login, logout, register, resetPassword };
+export { login, logout, register, resetPassword, refreshToken };
 
