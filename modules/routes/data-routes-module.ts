@@ -66,14 +66,18 @@ const addEntries = (server: Express, url: string): Express => {
 
 const deleteEntry = (server: Express, url: string): Express => {
   return server.delete(url, authValidation, async(req, res) => {
-    const {id} = req.query;
-
-    const response = await deleteEntryData(parseInt(id as string));
-    
-    res.send({
-      statusCode: 200,
-      message: 'entry deleted',
-    } as AuthResponse);
+    const response = await deleteEntryData(parseInt(req.query.id as string));
+    if(response === true){
+      res.status(200).json({
+        statusCode: 200,
+        message: 'entry deleted',
+      } as AuthResponse);
+    }else{
+      res.status(404).json({
+        statusCode: 404,
+        message: 'entry not found',
+      } as AuthResponse);
+    }
   });
 }
 

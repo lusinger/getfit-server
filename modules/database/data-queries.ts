@@ -100,11 +100,7 @@ export const addEntriesData = async(entries: Entry[], mail: string): Promise<any
   }
 }
 
-export const deleteEntryData = async(id: number): Promise<QueryArrayResult> => {
-  try {
-    const dbResponse = await query(`DELETE FROM entries WHERE id = $1`, [id]);
-    return dbResponse;
-  } catch (err) {
-    throw err;
-  }
+export const deleteEntryData = async(id: number): Promise<boolean> => {
+  const response = await query(`DELETE FROM entries WHERE id = $1`, [id]);
+  return response.rowCount > 0 ? true : false;
 }
