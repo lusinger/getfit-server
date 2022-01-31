@@ -1,7 +1,7 @@
 import {Express} from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthResponse } from '../../interfaces/auth-response';
-import { getSessionToken, validateSessionToken } from '../validation/validation-module';
+import { getSessionToken, validateSessionToken, authValidation } from '../validation/validation-module';
 
 import {query} from '../database/database-module';
 import { User } from '../../interfaces/user';
@@ -42,10 +42,17 @@ const loadUserData = (server: Express, url: string): Express => {
   });
 }
 
-const updateUserData = (server: Express, url: string): Express => {
-  return server.put(url, async(req, res) => {
+const updateUser = (server: Express, url: string): Express => {
+  return server.put(url, authValidation, async(req, res) => {
     try {
-      
+      const {userName, mail, oldPassword, newPassword, fullName, age, height, currentWeight, targetWeight, changePerWeek, activityRating, gender} = req.body.data;
+      const {id} = req.body.id;
+      const dbResponse = await query('UPDATE users SET activityrating = $1 WHERE id = $2', [activityRating, id]);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: 'user updated',
+      } as AuthResponse);
     } catch (err) {
       throw err;
     }
@@ -77,4 +84,4 @@ const deleteUser = (server: Express, url: string): Express => {
   }); 
 };
 
-export  { loadUserData, updateUserData, deleteUser }
+export  { loadUserData, updateUser, deleteUser }
