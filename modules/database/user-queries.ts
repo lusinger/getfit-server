@@ -1,4 +1,4 @@
-import {query} from './database-module';
+import { query } from './database-module';
 import { LoginRequest } from '../../interfaces/login-request';
 import { RegisterRequest } from '../../interfaces/register-request';
 import { DatabaseError, QueryArrayResult } from 'pg';
@@ -22,7 +22,7 @@ const calculateTDEE = (user: RegisterRequest): number => {
   return Math.floor(tdee);
 }
 
-export const userExists = async(req: LoginRequest): Promise<QueryArrayResult | null> => {
+const existsUser = async(req: LoginRequest): Promise<QueryArrayResult | null> => {
   try {
     const dbResponse = await query('SELECT * FROM users WHERE username = $1 OR mail = $1', 
       [req.user]);
@@ -32,7 +32,7 @@ export const userExists = async(req: LoginRequest): Promise<QueryArrayResult | n
   }
 };
 
-export const existsMail = async(mail: string): Promise<boolean> => {
+const existsMail = async(mail: string): Promise<boolean> => {
   try {
     const dbResponse = await query('SELECT mail FROM users WHERE mail = $1', [mail]);
     return dbResponse.rowCount > 0 ? true : false;
@@ -41,7 +41,7 @@ export const existsMail = async(mail: string): Promise<boolean> => {
   }
 }
 
-export const registerUser = async(req: RegisterRequest, hashedPw: string): Promise<number> => {
+const registerUser = async(req: RegisterRequest, hashedPw: string): Promise<number> => {
   try {
     const {userName, mail, fullName, age, height, currentWeight, targetWeight, changePerWeek, gender, activityRate} = req;
     const tdee = calculateTDEE(req);
@@ -60,3 +60,5 @@ export const registerUser = async(req: RegisterRequest, hashedPw: string): Promi
     }
   }
 };
+
+export {existsUser, existsMail, registerUser};
