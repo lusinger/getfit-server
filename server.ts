@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
+import { refreshToken, login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
 import { loadUserData, updateUserData, deleteUser } from './modules/routes/user-routes-module';
 import { getItems, getEntry, getEntries, deleteEntry, addEntries, addImage, updateEntry } from './modules/routes/data-routes-module';
 
@@ -24,12 +24,15 @@ server.use(cors({
 
 const port = getPort();
 
+refreshToken(server, '/api/refresh/token');
+
 register(server, '/api/register');
 login(server, '/api/login');
 logout(server, '/api/logout');
 resetPassword(server, '/api/reset');
 loadUserData(server, '/api/user');
 deleteUser(server, '/api/delete/user');
+updateUser(server, '/api/update/user');
 updateEntry(server, '/api/update/entry');
 
 getItems(server, '/api/items');

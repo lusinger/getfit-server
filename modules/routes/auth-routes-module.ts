@@ -7,10 +7,26 @@ import {query} from '../database/database-module';
 import { AuthResponse } from '../../interfaces/auth-response';
 import {LoginRequest} from '../../interfaces/login-request';
 
-import { createSessionToken, encryptPassword, getResetToken, getSessionToken, validatePassword, validateSessionToken } from '../validation/validation-module';
+import { authValidation, createSessionToken, encryptPassword, getResetToken, getSessionToken, validatePassword, validateSessionToken } from '../validation/validation-module';
 import { existsMail, existsUser, registerUser } from '../database/user-queries';
 import { RegisterRequest } from "../../interfaces/register-request";
 import { sendResetMail } from '../mail-service/mail-service';
+
+const refreshToken = (server: Express, url: string) => {
+  return server.get(url, authValidation, async(req, res) => {
+    console.log('refresh route');
+    res.clearCookie('SESSIONTOKEN');
+    const loginToken = await createSessionToken({mail: req.query.mail});
+    res.cookie(getSessionToken(), loginToken, {
+      httpOnly: true,
+      secure: true,
+    });
+    res.status(200).json({
+      statusCode: 200,
+      message: 'token refreshed',
+    } as AuthResponse);
+  });
+}
 
 const login = (server: Express, url: string) => {
   return server.get(url, async(req, res) => {
@@ -50,7 +66,7 @@ const login = (server: Express, url: string) => {
 const logout = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
     res.clearCookie(getSessionToken());
-    res.send({
+    res.status(200).json({
       statusCode: 200,
       message: 'session token cleared',
       payload: {logout: true},
@@ -96,7 +112,7 @@ const resetPassword = (server: Express, url: string): Express => {
             httpOnly: true,
             secure: true,
           });
-          res.send({
+          res.status(200).json({
             statusCode: 200,
             message: `you recieved mail if user with mail ${mail} exists`,
             payload: {allowReset: false},
@@ -107,13 +123,13 @@ const resetPassword = (server: Express, url: string): Express => {
     }else{
       if('access' in req.body){
         if(req.body.access === req.cookies.RESETTOKEN.slice(0, 10)){
-          res.send({
+          res.status(200).json({
             statusCode: 200,
             message: 'password reset allowed',
             payload: {allowReset: true},
           } as AuthResponse);
         }else{
-          res.send({
+          res.status(200).json({
             statusCode: 200,
             message: 'password reset allowed',
             payload: {allowReset: false},
@@ -124,7 +140,7 @@ const resetPassword = (server: Express, url: string): Express => {
         if(response.rowCount > 0){
           const encryptedPassword = response.rows[0] as any;
           if(await validatePassword(req.body.newPassword, encryptedPassword.password)){
-            res.send({
+            res.status(409).json({
               statusCode: 409,
               message: 'new password cant match old password',
             } as AuthResponse);
@@ -132,7 +148,7 @@ const resetPassword = (server: Express, url: string): Express => {
             const newPassword = await encryptPassword(req.body.newPassword);
             const dbResponse = await query('UPDATE users SET password = $1 WHERE mail = $2', [newPassword, resetToken.mail]);
             res.clearCookie(getResetToken());
-            res.send({
+            res.status(200).json({
               statusCode: 200,
               message: 'password reset',
             } as AuthResponse);
@@ -143,5 +159,5 @@ const resetPassword = (server: Express, url: string): Express => {
   });
 }
 
-export { login, logout, register, resetPassword };
+export { login, logout, register, resetPassword, refreshToken };
 
