@@ -2,8 +2,8 @@ import {Express} from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { AuthResponse } from '../../interfaces/auth-response';
 import { Entry } from '../../interfaces/entry';
-import { getEntryData, getEntriesData, deleteEntryData, addEntriesData, getItemsData} from '../database/data-queries';
-import { authValidation } from '../validation/validation-module';
+import {updateEntryData, getEntryData, getEntriesData, deleteEntryData, addEntriesData, getItemsData} from '../database/data-queries';
+import { validateSessionToken, authValidation } from '../validation/validation-module';
 
 const getEntry = (server: Express, url: string): Express => {
   return server.get(url, authValidation, async(req, res) => {
@@ -64,6 +64,21 @@ const addEntries = (server: Express, url: string): Express => {
   });
 }
 
+const updateEntry = (server: Express, url: string): Express => {
+  return server.put(url, async(req, res) => {
+    const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
+    if(valid !== null){
+      const entry = req.body as Entry;
+      const response = await updateEntryData(entry, valid.mail);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: 'entry updated',
+      } as AuthResponse);
+    }
+  });
+}
+
 const deleteEntry = (server: Express, url: string): Express => {
   return server.delete(url, authValidation, async(req, res) => {
     const response = await deleteEntryData(parseInt(req.query.id as string));
@@ -83,19 +98,19 @@ const deleteEntry = (server: Express, url: string): Express => {
 
 const getItems = (server: Express, url: string): Express => {
   return server.get(url, authValidation, async(req, res) => {
-    const search = req.query?.search ? req.query.search as string : undefined;
-    const start = req.query?.start ? parseInt(req.query.start as string) : undefined;
-    const end = req.query?.end ? parseInt(req.query.end as string) : undefined;
-    
+    const {search, start, end}: {search: string | undefined, start: number | undefined, end: number | undefined} = req.query as any;
     const response = await getItemsData(search, start, end);
     if(response !== null){
-      res.send(
-        response,
-      )
+      res.status(200).json({
+        statusCode: 200,
+        message: 'matching entries fetched',
+        payload: response,
+      } as AuthResponse);
     }else{
-      res.send(
-        []
-      );
+      res.status(404).json({
+        statusCode: 404,
+        message: 'no entries found matching your search',
+      } as AuthResponse);
     }
   });
 }
@@ -108,4 +123,4 @@ const addImage = (server: Express, url: string): Express => {
   });
 }
 
-export {deleteEntry, addEntries, getEntry, getEntries, getItems, addImage};
+export {updateEntry, deleteEntry, addEntries, getEntry, getEntries, getItems, addImage};

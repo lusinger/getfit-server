@@ -5,8 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { refreshToken, login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
-import { loadUserData, updateUser, deleteUser } from './modules/routes/user-routes-module';
-import { getItems, getEntry, getEntries, deleteEntry, addEntries, addImage } from './modules/routes/data-routes-module';
+import { loadUserData, updateUserData, deleteUser } from './modules/routes/user-routes-module';
+import { getItems, getEntry, getEntries, deleteEntry, addEntries, addImage, updateEntry } from './modules/routes/data-routes-module';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;
@@ -33,7 +33,7 @@ resetPassword(server, '/api/reset');
 loadUserData(server, '/api/user');
 deleteUser(server, '/api/delete/user');
 updateUser(server, '/api/update/user');
-
+updateEntry(server, '/api/update/entry');
 
 getItems(server, '/api/items');
 
