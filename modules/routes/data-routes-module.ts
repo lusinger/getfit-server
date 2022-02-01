@@ -96,18 +96,22 @@ const getItems = (server: Express, url: string): Express => {
     if(isValid !== null){
       const response = await getItemsData(search, start, end);
       if(response !== null){
-        res.send(
-          response,
-        )
+        res.status(200).json({
+          statusCode: 200,
+          message: 'matching entries fetched',
+          payload: response,
+        } as AuthResponse);
       }else{
-        res.send(
-          []
-        );
+        res.status(404).json({
+          statusCode: 404,
+          message: 'no entries found matching your search',
+        } as AuthResponse);
       }
     }else{
-      res.send(
-        []
-      );
+      res.status(401).json({
+        statusCode: 401,
+        message: 'unauthorized access',
+      } as AuthResponse);
     }
   });
 }
