@@ -2,7 +2,7 @@ import {Express} from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { AuthResponse } from '../../interfaces/auth-response';
 import { Entry } from '../../interfaces/entry';
-import {getEntryData, getEntriesData, deleteEntryData, addEntriesData, getItemsData} from '../database/data-queries';
+import {updateEntryData, getEntryData, getEntriesData, deleteEntryData, addEntriesData, getItemsData} from '../database/data-queries';
 import { validateSessionToken,  } from '../validation/validation-module';
 
 const getEntry = (server: Express, url: string): Express => {
@@ -72,6 +72,21 @@ const addEntries = (server: Express, url: string): Express => {
   });
 }
 
+const updateEntry = (server: Express, url: string): Express => {
+  return server.put(url, async(req, res) => {
+    const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
+    if(valid !== null){
+      const entry = req.body as Entry;
+      const response = await updateEntryData(entry, valid.mail);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: 'entry updated',
+      } as AuthResponse);
+    }
+  });
+}
+
 const deleteEntry = (server: Express, url: string): Express => {
   return server.delete(url, async(req, res) => {
     const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
@@ -124,4 +139,4 @@ const addImage = (server: Express, url: string): Express => {
   });
 }
 
-export {deleteEntry, addEntries, getEntry, getEntries, getItems, addImage};
+export {updateEntry, deleteEntry, addEntries, getEntry, getEntries, getItems, addImage};

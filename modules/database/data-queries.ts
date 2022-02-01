@@ -88,6 +88,15 @@ export const getEntriesData = async(date: Date, mail: string): Promise<Entry[] |
   }
 }
 
+export const updateEntryData = async(entry: Entry, mail: string): Promise<any> => {
+  try {
+    const dbResponse = await query('UPDATE entries SET amount = $1, unit = $2 WHERE id = $3', 
+      [entry.amount, entry.unit, entry.id]);
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const addEntriesData = async(entries: Entry[], mail: string): Promise<any> => {
   try {
     entries.forEach(async(entry) => {
