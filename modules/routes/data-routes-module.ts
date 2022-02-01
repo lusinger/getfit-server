@@ -3,7 +3,7 @@ import { JsonWebTokenError } from 'jsonwebtoken';
 import { AuthResponse } from '../../interfaces/auth-response';
 import { Entry } from '../../interfaces/entry';
 import {getEntryData, getEntriesData, deleteEntryData, addEntriesData, getItemsData} from '../database/data-queries';
-import { validateSessionToken } from '../validation/validation-module';
+import { validateSessionToken,  } from '../validation/validation-module';
 
 const getEntry = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
@@ -90,9 +90,7 @@ const deleteEntry = (server: Express, url: string): Express => {
 
 const getItems = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
-    const search = req.query?.search ? req.query.search as string : undefined;
-    const start = req.query?.start ? parseInt(req.query.start as string) : undefined;
-    const end = req.query?.end ? parseInt(req.query.end as string) : undefined;
+    const {search, start, end}: {search: string | undefined, start: number | undefined, end: number | undefined} = req.query as any;
     const isValid = await validateSessionToken(req.cookies.SESSIONTOKEN);
 
     if(isValid !== null){
