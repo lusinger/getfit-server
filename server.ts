@@ -6,7 +6,7 @@ dotenv.config();
 
 import { login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
 import { loadUserData, updateUserData, deleteUser } from './modules/routes/user-routes-module';
-import { getItems, getEntry, getEntries, deleteEntry, addEntries, addImage } from './modules/routes/data-routes-module';
+import { getItems, getEntry, getEntries, deleteEntry, addEntries, addImage, updateEntry } from './modules/routes/data-routes-module';
 
 const getPort = (): number => {
   return process.env.PORT ? parseInt(process.env.PORT) : 3002;
@@ -30,6 +30,7 @@ logout(server, '/api/logout');
 resetPassword(server, '/api/reset');
 loadUserData(server, '/api/user');
 deleteUser(server, '/api/delete/user');
+updateEntry(server, '/api/update/entry');
 
 getItems(server, '/api/items');
 

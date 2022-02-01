@@ -70,13 +70,13 @@ const register = async(server: Express, url: string): Promise<Express> => {
 
     switch(dbResponse){
       case 0: 
-        res.send({
+        res.status(201).json({
           statusCode: 201,
           message: 'user created',
         } as AuthResponse);
         break;
       case 23505: 
-        res.send({
+        res.status(409).json({
           statusCode: 409,
           message: 'user already exists',
         } as AuthResponse);
