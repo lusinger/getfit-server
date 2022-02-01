@@ -7,18 +7,15 @@ import {query} from '../database/database-module';
 import { AuthResponse } from '../../interfaces/auth-response';
 import {LoginRequest} from '../../interfaces/login-request';
 
-import { userExists } from '../database/user-queries';
 import { createSessionToken, encryptPassword, getResetToken, getSessionToken, validatePassword, validateSessionToken } from '../validation/validation-module';
-import { registerUser } from "../database/user-queries";
+import { existsMail, existsUser, registerUser } from '../database/user-queries';
 import { RegisterRequest } from "../../interfaces/register-request";
-
-import { existsMail } from '../database/user-queries';
 import { sendResetMail } from '../mail-service/mail-service';
 
 const login = (server: Express, url: string) => {
   return server.get(url, async(req, res) => {
     const request = req.query as unknown as LoginRequest
-    const dbResponse = await userExists(request);
+    const dbResponse = await existsUser(request);
     if(dbResponse !== null){
       const {password, mail} = dbResponse.rows[0] as any;
       const validPassword = await validatePassword(request.password, password);
@@ -29,22 +26,22 @@ const login = (server: Express, url: string) => {
             httpOnly: true,
             secure: true,
           });
-          res.send({
+          res.status(200).json({
             statusCode: 200,
             message: 'user is valid',
           } as AuthResponse);
           break;
         case false:
-          res.send({
+          res.status(404).json({
             statusCode: 404,
             message: 'username or password invalid',
           } as AuthResponse);
           break;
       }
     }else{
-      res.send({
+      res.status(404).json({
         statusCode: 404,
-        message: 'user not found',
+        message: 'username or password invalid',
       } as AuthResponse)
     }
   });
