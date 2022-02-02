@@ -45,27 +45,30 @@ VBIovic5l0xFkEHskAjFTevO86Fsz1C2aSeRKSqGFoOQ0tmJzBEs1R6KqnHInicD
 TQrKhArgLXX4v3CddjfTRJkFWDbE/CkvKZNOrcf1nhaGCPspRJj2KUkj1Fhl9Cnc
 dn/RsYEONbwQSjIfMPkvxF+8HQ==
 -----END PRIVATE KEY-----
-`````
+````
 
 4. create .env file containing following content
-   
-  PORT = 3001 --> "port on which your server should run (also change in Angular environment file)"
 
-  //--settings for postgres database
-  //--change accordingly
-  PGPORT = 5432
-  PGHOST = localhost
-  PGUSER = admin 
-  PGPASSWORD = root
-  PGDATABASE = postgres
+````
+//--port on which your server should run (also change in Angular environment file)
+PORT = 3001
 
-  //--these settings can be kept
-  //--uses a throw away mail account
-  SALT_ROUNDS = 10
-  JWT_EXP = 600
-  JWT_SESSION_TOKEN = SESSIONTOKEN
-  JWT_RESET_TOKEN = RESETTOKEN
-  MAIL_ADRESS = max.musterperson@outlook.com
-  MAIL_PW = Admin1554
+//--settings for postgres database
+//--change accordingly
+PGPORT = 5432
+PGHOST = localhost
+PGUSER = admin 
+PGPASSWORD = root
+PGDATABASE = postgres
+
+//--these settings can be kept
+//--uses a throw away mail account
+SALT_ROUNDS = 10
+JWT_EXP = 600
+JWT_SESSION_TOKEN = SESSIONTOKEN
+JWT_RESET_TOKEN = RESETTOKEN
+MAIL_ADRESS = max.musterperson@outlook.com
+MAIL_PW = Admin1554
+````
 
 5. run `npm run build` and then `npm run dev` no everything should be running
