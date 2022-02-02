@@ -1,10 +1,8 @@
 import {Express} from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthResponse } from '../../interfaces/auth-response';
 import { getSessionToken, validateSessionToken, authValidation } from '../validation/validation-module';
-
 import {query} from '../database/database-module';
-import { User } from '../../interfaces/user';
+import { User, AuthResponse } from '../../interfaces/interfaces';
 
 const loadUserData = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {

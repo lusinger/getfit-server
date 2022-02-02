@@ -3,8 +3,8 @@ import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
-import { AuthResponse } from '../../interfaces/auth-response';
 dotenv.config();
+import {AuthResponse} from '../../interfaces/interfaces';
 
 //--Middleware function that handles token validation
 const authValidation = async (req: Request, res: Response, next: NextFunction) => {
@@ -45,7 +45,7 @@ const getPrivateKey = async(): Promise<Buffer> => {
 };
 
 const getExpTime = (): number => {
-  return process.env.JWT_EXP ? parseInt(process.env.JWT_EXP) : 120;
+  return process.env.JWT_EXP ? parseInt(process.env.JWT_EXP) : 600;
 };
 
 const getSessionToken = (): string => {

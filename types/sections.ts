@@ -1,1 +1,0 @@
-export type Sections = 'breakfast' | 'lunch' | 'dinner' | 'snack';

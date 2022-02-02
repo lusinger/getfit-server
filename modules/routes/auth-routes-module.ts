@@ -3,14 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import {query} from '../database/database-module';
-
-import { AuthResponse } from '../../interfaces/auth-response';
-import {LoginRequest} from '../../interfaces/login-request';
-
 import { authValidation, createSessionToken, encryptPassword, getResetToken, getSessionToken, validatePassword, validateSessionToken } from '../validation/validation-module';
 import { existsMail, existsUser, registerUser } from '../database/user-queries';
-import { RegisterRequest } from "../../interfaces/register-request";
+import { RegisterRequest, LoginRequest, AuthResponse } from '../../interfaces/interfaces';
 import { sendResetMail } from '../mail-service/mail-service';
+
 
 const refreshToken = (server: Express, url: string) => {
   return server.get(url, authValidation, async(req, res) => {
@@ -105,8 +102,10 @@ const resetPassword = (server: Express, url: string): Express => {
       if('mail' in req.body){
         const {mail} = req.body;
         const doesMailExist = await existsMail(mail as string);
-        if(doesMailExist){
+        const doesUserExist = await existsUser({user: mail, password: ''});
+        if(doesMailExist && doesUserExist){
           const resetToken = await createSessionToken({mail: mail});
+          const {fullname} = doesUserExist.rows[0] as unknown as any;
           sendResetMail(mail, resetToken.slice(0, 10));
           res.cookie(getResetToken(), resetToken, {
             httpOnly: true,
@@ -115,7 +114,11 @@ const resetPassword = (server: Express, url: string): Express => {
           res.status(200).json({
             statusCode: 200,
             message: `you recieved mail if user with mail ${mail} exists`,
-            payload: {allowReset: false},
+            payload: {
+              allowReset: false,
+              mail: mail,
+              fullName: fullname,
+            },
           } as AuthResponse)
         }
       }

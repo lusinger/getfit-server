@@ -1,6 +1,5 @@
 import { query } from './database-module';
-import { LoginRequest } from '../../interfaces/login-request';
-import { RegisterRequest } from '../../interfaces/register-request';
+import { RegisterRequest, LoginRequest } from '../../interfaces/interfaces';
 import { DatabaseError, QueryArrayResult } from 'pg';
 
 const calculateTDEE = (user: RegisterRequest): number => {

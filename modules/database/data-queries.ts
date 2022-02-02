@@ -1,8 +1,5 @@
 import { query } from './database-module';
-import { Item } from '../../interfaces/item';
-import { QueryArrayResult } from 'pg';
-import { Entry } from '../../interfaces/entry';
-import { Recipe } from '../../interfaces/recipe';
+import { Recipe, Entry, Item } from '../../interfaces/interfaces';
 
 export const getItem = async(id: number): Promise<Item | null> => {
   const queryResult = await query('SELECT * FROM items WHERE id = $1', [id]);

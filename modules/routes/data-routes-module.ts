@@ -1,9 +1,8 @@
 import {Express} from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
-import { AuthResponse } from '../../interfaces/auth-response';
-import { Entry } from '../../interfaces/entry';
 import {updateEntryData, getEntryData, getEntriesData, deleteEntryData, addEntriesData, getItemsData} from '../database/data-queries';
 import { validateSessionToken, authValidation } from '../validation/validation-module';
+import { AuthResponse, Entry } from '../../interfaces/interfaces';
 
 const getEntry = (server: Express, url: string): Express => {
   return server.get(url, authValidation, async(req, res) => {
@@ -65,17 +64,15 @@ const addEntries = (server: Express, url: string): Express => {
 }
 
 const updateEntry = (server: Express, url: string): Express => {
-  return server.put(url, async(req, res) => {
-    const valid = await validateSessionToken(req.cookies.SESSIONTOKEN);
-    if(valid !== null){
-      const entry = req.body as Entry;
-      const response = await updateEntryData(entry, valid.mail);
+  return server.put(url, authValidation, async(req, res) => {
+    const token = await validateSessionToken(req.cookies.SESSIONTOKEN);
+    const entry = req.body as Entry;
+    const response = await updateEntryData(entry, token!.mail);
 
-      res.status(200).json({
-        statusCode: 200,
-        message: 'entry updated',
-      } as AuthResponse);
-    }
+    res.status(200).json({
+      statusCode: 200,
+      message: 'entry updated',
+    } as AuthResponse);
   });
 }
 
