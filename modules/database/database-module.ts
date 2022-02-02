@@ -96,7 +96,7 @@ const checkIfItemsTableExists = async(): Promise<void> => {
 
 const populateItemsTable = async(): Promise<void> => {
   try {
-    const data = await fs.readFile(__dirname + '/item-data.json');
+    const data = await fs.readFile( './data/item-data.json');
     let items = JSON.parse(data.toString()) as Item[];
     for(const item of items){
       query(`INSERT INTO items(itemname, protein, fat, carb, perg, perml, perel)
