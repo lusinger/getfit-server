@@ -33,7 +33,7 @@ logout(server, '/api/logout');
 resetPassword(server, '/api/reset');
 loadUserData(server, '/api/user');
 deleteUser(server, '/api/delete/user');
-updateUser(server, '/api/update/user');
+//updateUser(server, '/api/update/user');
 updateEntry(server, '/api/update/entry');
 refreshToken(server, '/api/refresh/token');
 

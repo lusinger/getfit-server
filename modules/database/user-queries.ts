@@ -60,4 +60,4 @@ const registerUser = async(req: RegisterRequest, hashedPw: string): Promise<numb
   }
 };
 
-export {existsUser, existsMail, registerUser};
+export {existsUser, existsMail, registerUser, calculateTDEE};

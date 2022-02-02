@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { getSessionToken, validateSessionToken, authValidation } from '../validation/validation-module';
 import {query} from '../database/database-module';
 import { User, AuthResponse } from '../../interfaces/interfaces';
+import { calculateTDEE } from '../database/user-queries';
 
 const loadUserData = (server: Express, url: string): Express => {
   return server.get(url, async(req, res) => {
@@ -44,15 +45,21 @@ const updateUser = (server: Express, url: string): Express => {
   return server.put(url, authValidation, async(req, res) => {
     try {
       const {userName, mail, oldPassword, newPassword, fullName, age, height, currentWeight, targetWeight, changePerWeek, activityRating, gender} = req.body.data;
+      console.log(req.body.id);
       const {id} = req.body.id;
-      const dbResponse = await query('UPDATE users SET activityrating = $1 WHERE id = $2', [activityRating, id]);
-
-      res.status(200).json({
-        statusCode: 200,
-        message: 'user updated',
-      } as AuthResponse);
+      if(oldPassword === ''){
+        const newTDEE = calculateTDEE({userName: userName, mail: mail, password: '', fullName: '', age: age, height: height, currentWeight: currentWeight, targetWeight: targetWeight, changePerWeek: changePerWeek, activityRate: activityRating, gender: gender});
+        console.log(newTDEE);
+        const dbResponse = await query(`UPDATE users SET username = $1, mail = $2, fullname = $3, age = $4, height = $5, currentweight = $6, targetweight = $7, changeperweek = $8, activityrating = $9, gender = $10, caloriegoal = $11 WHERE id = $12 RETURNING *`, 
+          [userName, mail, fullName, age, height, currentWeight, targetWeight, changePerWeek, activityRating, gender, newTDEE, id]);
+        console.log(dbResponse);
+        res.status(200).json({
+          statusCode: 200,
+          message: 'user updated',
+        } as AuthResponse);
+      }
     } catch (err) {
-      throw err;
+      console.log(err);
     }
   });
 };
