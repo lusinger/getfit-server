@@ -7,7 +7,7 @@ Serves as Back-End for getfit-app
 1. run `npm install` to install all needed packages.
 2. create keys folder containing private-key.key file
 3. add following content to this file 
-      
+````     
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1SU1LfVLPHCozMxH2Mo
 4lgOEePzNm0tRgeLezV6ffAt0gunVTLw7onLRnrq0/IzW7yWR7QkrmBL7jTKEn5u
@@ -45,6 +45,7 @@ VBIovic5l0xFkEHskAjFTevO86Fsz1C2aSeRKSqGFoOQ0tmJzBEs1R6KqnHInicD
 TQrKhArgLXX4v3CddjfTRJkFWDbE/CkvKZNOrcf1nhaGCPspRJj2KUkj1Fhl9Cnc
 dn/RsYEONbwQSjIfMPkvxF+8HQ==
 -----END PRIVATE KEY-----
+`````
 
 4. create .env file containing following content
    
