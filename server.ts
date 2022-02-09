@@ -4,9 +4,10 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { refreshToken, login, logout, register, resetPassword } from './modules/routes/auth-routes-module';
-import { loadUserData, updateUser, deleteUser } from './modules/routes/user-routes-module';
-import { getItems, getEntry, getEntries, deleteEntry, addEntries, updateEntry } from './modules/routes/data-routes-module';
+import { authRouter } from './modules/routes/auth-routes-module';
+import {userRouter} from './modules/routes/user-routes-module';
+import {entryRouter} from './modules/routes/entry-routes-module';
+import { itemRouter } from './modules/routes/item-routes-module';
 import { initializeDB } from './modules/database/database-module';
 
 const getPort = (): number => {
@@ -14,6 +15,7 @@ const getPort = (): number => {
 };
 
 const server = express();
+const port = getPort();
 
 server.use(express());
 server.use(express.json());
@@ -22,27 +24,10 @@ server.use(cors({
   credentials: true,
   origin: 'http://localhost:4200',
 }));
-
-const port = getPort();
-
-refreshToken(server, '/api/refresh/token');
-
-register(server, '/api/register');
-login(server, '/api/login');
-logout(server, '/api/logout');
-resetPassword(server, '/api/reset');
-loadUserData(server, '/api/user');
-deleteUser(server, '/api/delete/user');
-//updateUser(server, '/api/update/user');
-updateEntry(server, '/api/update/entry');
-refreshToken(server, '/api/refresh/token');
-
-getItems(server, '/api/items');
-
-getEntry(server, '/api/entry');
-getEntries(server, '/api/entries');
-deleteEntry(server, '/api/delete/entry');
-addEntries(server, '/api/create/entries');
+server.use('/auth', authRouter);
+server.use('/api/user', userRouter);
+server.use('/api/entry', entryRouter);
+server.use('/api/item', itemRouter);
 
 server.listen(port, async() => {
   await initializeDB();
