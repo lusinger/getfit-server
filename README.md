@@ -7,7 +7,11 @@ Serves as Back-End for getfit-app
 1. run `npm install` to install all needed packages.
 2. create keys folder containing private-key.key file
 3. add following content to this file 
+<<<<<<< HEAD
 ````     
+=======
+      
+>>>>>>> 5dd27a3d8d1a15cee2ddf57e9103677c60180b5c
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1SU1LfVLPHCozMxH2Mo
 4lgOEePzNm0tRgeLezV6ffAt0gunVTLw7onLRnrq0/IzW7yWR7QkrmBL7jTKEn5u
@@ -45,6 +49,7 @@ VBIovic5l0xFkEHskAjFTevO86Fsz1C2aSeRKSqGFoOQ0tmJzBEs1R6KqnHInicD
 TQrKhArgLXX4v3CddjfTRJkFWDbE/CkvKZNOrcf1nhaGCPspRJj2KUkj1Fhl9Cnc
 dn/RsYEONbwQSjIfMPkvxF+8HQ==
 -----END PRIVATE KEY-----
+<<<<<<< HEAD
 ````
 
 4. create .env file containing following content
@@ -72,3 +77,28 @@ MAIL_PW = Admin1554
 ````
 
 5. run `npm run build` and then `npm run dev` no everything should be running
+=======
+
+4. create .env file containing following content
+   
+  PORT = 3001 --> "port on which your server should run (also change in Angular environment file)"
+
+  //--settings for postgres database
+  //--change accordingly
+  PGPORT = 5432
+  PGHOST = localhost
+  PGUSER = admin 
+  PGPASSWORD = root
+  PGDATABASE = postgres
+
+  //--these settings can be kept
+  //--uses a throw away mail account
+  SALT_ROUNDS = 10
+  JWT_EXP = 600
+  JWT_SESSION_TOKEN = SESSIONTOKEN
+  JWT_RESET_TOKEN = RESETTOKEN
+  MAIL_ADRESS = max.musterperson@outlook.com
+  MAIL_PW = Admin1554
+
+5. run `npm run build` and then `npm run dev` no everything should be running
+>>>>>>> 5dd27a3d8d1a15cee2ddf57e9103677c60180b5c
