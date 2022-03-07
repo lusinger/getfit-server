@@ -7,7 +7,7 @@ Serves as Back-End for getfit-app
 1. run `npm install` to install all needed packages.
 2. create keys folder containing private-key.key file
 3. add following content to this file 
-````     
+````     
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1SU1LfVLPHCozMxH2Mo
 4lgOEePzNm0tRgeLezV6ffAt0gunVTLw7onLRnrq0/IzW7yWR7QkrmBL7jTKEn5u
@@ -49,7 +49,7 @@ dn/RsYEONbwQSjIfMPkvxF+8HQ==
 
 4. create .env file containing following content
 
-````
+````
 //--port on which your server should run (also change in Angular environment file)
 PORT = 3001
 
